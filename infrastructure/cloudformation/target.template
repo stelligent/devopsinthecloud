@@ -1,0 +1,151 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "CloudFormation Template to provision Manatee Jenkins instance",
+  
+  "Parameters" : {
+      
+    "KeyName" : {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type" : "String",
+      "Default" : "manatee_dev",
+      "MinLength": "1",
+      "MaxLength": "64",
+      "AllowedPattern" : "[-_ a-zA-Z0-9]*",
+      "ConstraintDescription" : "can contain only alphanumeric characters, spaces, dashes and underscores."
+    },
+
+    "InstanceType" : {
+      "Description" : "Jenkins EC2 instance type",
+      "Type" : "String",
+      "Default" : "c1.medium",
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    }
+  },
+  
+  "Mappings" : {
+    "AWSInstanceType2Arch" : {
+      "t1.micro"    : { "Arch" : "64" },
+      "m1.small"    : { "Arch" : "32" },
+      "m1.large"    : { "Arch" : "64" },
+      "m1.xlarge"   : { "Arch" : "64" },
+      "m2.xlarge"   : { "Arch" : "64" },
+      "m2.2xlarge"  : { "Arch" : "64" },
+      "m2.4xlarge"  : { "Arch" : "64" },
+      "c1.medium"   : { "Arch" : "64" },
+      "c1.xlarge"   : { "Arch" : "64" },
+      "cc1.4xlarge" : { "Arch" : "64" }
+    },
+    "AWSRegionArch2AMI" : {
+      "us-east-1"      : { "32" : "ami-ed65ba84", "64" : "ami-e565ba8c" }
+    }
+  },
+    
+  "Resources" : {     
+      
+    "CfnUser" : {
+      "Type" : "AWS::IAM::User",
+      "Properties" : {
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": { "Statement":[{
+            "Effect":"Allow",
+            "Action":"*",
+            "Resource":"*"
+          }
+        ]}
+       }]
+      }
+    },
+
+    "HostKeys" : {
+      "Type" : "AWS::IAM::AccessKey",
+      "Properties" : {
+        "UserName" : { "Ref": "CfnUser" }
+      }
+    },
+
+    "WebServer": {  
+      "Type": "AWS::EC2::Instance",
+	  "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "packages" : {
+              "yum" : {
+                "puppet"   : [],
+                "git"      : [],
+              }
+            },
+
+            "sources" : {
+              "/opt/aws/apitools/" : "https://s3.amazonaws.com/sea2shore/resources/binaries/CloudFormation-CLI.zip"
+            },
+
+			"files" : {
+			  "/home/ec2-user/" : {
+                "content" : { "Fn::Join" : ["", [
+				  "class mysql::params {\n",
+					"$resource_url = 'https://s3.amazonaws.com/sea2shore/resources/rpm'\n",
+				  "}"
+                  ]]},
+                "mode"   : "000777",
+                "owner"  : "ec2-user",
+                "group"  : "ec2-user"
+              }
+			}
+          }
+        }
+      },
+      "Properties": {
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "InstanceType"   : { "Ref" : "InstanceType" },
+        "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
+        "KeyName"        : { "Ref" : "KeyName" },
+		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+		  "#!/bin/bash -v\n",
+		  "wget https://s3.amazonaws.com/sea2shore/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		  "yum -y install libcurl-devel openssl-devel mysql-devel gcc make gcc-c++ openssl-devel zlib-devel git libxslt-devel sqlite-devel\n",
+		  "gem install bundler passenger --no-rdoc --no-ri\n",
+		  "git clone git://github.com/railstutorial/sample_app.git /var/www/rails\n",
+		  "cd /var/www/rails\n",
+		  "bundle install\n",
+		  "rake db:migrate\n",
+		  "passenger start -p 80"
+		]]}}
+      }
+    },
+
+    "IPAddress" : {
+      "Type" : "AWS::EC2::EIP"
+    },
+    
+    "IPAssoc" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "InstanceId" : { "Ref" : "WebServer" },
+        "EIP" : { "Ref" : "IPAddress" }
+       }
+    },
+    
+    "FrontendGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH and access to Apache and Tomcat",
+        "SecurityGroupIngress" : [
+          {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
+          {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+          {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"}
+        ]
+      }      
+    }     
+  },
+  
+  "Outputs" : {
+    "InstanceIPAddress" : {
+      "Value" : { "Ref" : "IPAddress" }
+    }
+  }
+}
