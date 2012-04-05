@@ -1,0 +1,260 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "CloudFormation Template to provision a Jenkins instance",
+  
+  "Parameters" : {
+      
+    "KeyName" : {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type" : "String",
+	  "Default" : "utility",
+      "MinLength": "1",
+      "MaxLength": "64",
+      "AllowedPattern" : "[-_ a-zA-Z0-9]*",
+      "ConstraintDescription" : "can contain only alphanumeric characters, spaces, dashes and underscores."
+    },
+
+    "InstanceType" : {
+      "Description" : "WebServer EC2 instance type",
+      "Type" : "String",
+      "Default" : "t1.micro",
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    }
+  
+  },
+  
+  "Mappings" : {
+    "AWSInstanceType2Arch" : {
+      "t1.micro"    : { "Arch" : "64" },
+      "m1.small"    : { "Arch" : "32" },
+      "m1.large"    : { "Arch" : "64" },
+      "m1.xlarge"   : { "Arch" : "64" },
+      "m2.xlarge"   : { "Arch" : "64" },
+      "m2.2xlarge"  : { "Arch" : "64" },
+      "m2.4xlarge"  : { "Arch" : "64" },
+      "c1.medium"   : { "Arch" : "32" },
+      "c1.xlarge"   : { "Arch" : "64" },
+      "cc1.4xlarge" : { "Arch" : "64" }
+    },
+    "AWSRegionArch2AMI" : {
+      "us-east-1"      : { "32" : "ami-7f418316", "64" : "ami-7341831a" },
+      "us-west-1"      : { "32" : "ami-951945d0", "64" : "ami-971945d2" },
+      "us-west-2"      : { "32" : "ami-16fd7026", "64" : "ami-10fd7020" },
+      "eu-west-1"      : { "32" : "ami-24506250", "64" : "ami-20506254" },
+      "ap-southeast-1" : { "32" : "ami-74dda626", "64" : "ami-7edda62c" },
+      "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-e8fa4ee9" }
+    }
+  },
+    
+  "Resources" : {     
+      
+    "CfnUser" : {
+      "Type" : "AWS::IAM::User",
+      "Properties" : {
+        "Path": "/",
+        "Policies": [{
+          "PolicyName": "root",
+          "PolicyDocument": { "Statement":[{
+            "Effect":"Allow",
+            "Action":"cloudformation:DescribeStackResource",
+            "Resource":"*"
+          }]}
+        }]
+      }
+    },
+
+    "HostKeys" : {
+      "Type" : "AWS::IAM::AccessKey",
+      "Properties" : {
+        "UserName" : {"Ref": "CfnUser"}
+      }
+    },
+
+    "WebServer": {  
+      "Type": "AWS::EC2::Instance",
+      "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "packages" : {
+              "yum" : {
+                "java-1.6.0-openjdk"    : [],
+                "tomcat6"   			: [],
+				"git"					: [],
+				"make"					: [],
+				"gcc"					: [],
+				"sqlite-devel"			: [],
+				"libxml2-devel"			: [],
+				"libxslt-devel"			: [],
+				"libyaml-devel"			: []
+              }
+            },
+
+			"files" : {
+	          "/usr/share/tomcat6/webapps/jenkins.war" : { 
+		        "source" : "http://mirrors.jenkins-ci.org/war-rc/latest/jenkins.war", 
+		        "mode"   : "000500", 
+		        "owner"  : "tomcat",
+		        "group"  : "tomcat" 
+		      },
+		
+			  "/usr/share/tomcat6/.ssh/known_hosts" : {
+	            "content" : { "Fn::Join" : ["", [
+	              "# ADD YOUR GITHUB HOST HERE"
+	            ]]},
+	            "mode"   : "000644",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat"
+	          },
+			  "/usr/share/tomcat6/.ssh/id_rsa" : {
+	            "content" : { "Fn::Join" : ["", [
+				  "# ADD YOUR JENKINS SERVER PRIVATE KEY HERE"
+	            ]]},
+	            "mode"   : "000600",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat"
+	          },
+			  "/usr/share/tomcat6/.ssh/id_rsa.pub" : {
+	            "content" : { "Fn::Join" : ["", [
+	              "# ADD YOUR PUBLIC KEY OF JENKINS SERVER HERE"
+	            ]]},
+	            "mode"   : "000644",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat"
+	          },
+	
+			  "/etc/cron.hourly/jenkins_backup.sh" : {
+				"content" : { "Fn::Join" : ["", [
+				  "#!/bin/bash -v\n",
+				  "# Change into your jenkins home.\n",
+				  "cd /usr/share/tomcat6/.jenkins\n",
+
+				  "# Add any new conf files, jobs, users, and content.\n",
+				  "git add -f *.xml jobs/*/config.xml .gitignore\n",
+
+				  "# Ignore things we don't care about.\n",
+				  "cat > .gitignore <<EOF\n",
+				  "log\n",
+				  "*.log\n",
+				  "*.tmp\n",
+				  "*.old\n",
+				  "*.bak\n",
+				  "*.jar\n",
+				  ".*\n",
+				  "plugins/\n",
+				  "updates/\n",
+				  "jobs/*/builds\n",
+				  "jobs/*/last*\n",
+				  "jobs/*/next*\n",
+				  "jobs/*/*.csv\n",
+				  "jobs/*/*.txt\n",
+				  "jobs/*/*.log\n",
+				  "jobs/*/workspace\n",
+				  "EOF\n",
+
+				  "# Remove anything from git that no longer exists in jenkins.\n",
+				  "git status --porcelain | grep '^ D ' | awk '{print $2;}' | xargs -r git rm\n",
+
+				  "# And finally, commit and push\n",
+				  "git commit -m 'Automated commit of jenkins configuration' -a\n",
+				  "git push"
+				]]},
+	            "mode"   : "000555",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat"
+			  }
+		    }
+          }
+        }
+      },
+      "Properties": {
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "InstanceType"   : { "Ref" : "InstanceType" },
+        "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
+        "KeyName"        : { "Ref" : "KeyName" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash -v\n",
+		  "date > /home/ec2-user/starttime\n",
+          "yum update -y aws-cfn-bootstrap\n",
+
+          "# Install packages\n",
+          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
+          "    --access-key ",  { "Ref" : "HostKeys" },
+          "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+          "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+		  
+		  "# Copy Github credentials to root ssh directory\n",
+		  "cp /usr/share/tomcat6/.ssh/* ~/.ssh/\n",
+		
+		  "# Update Jenkins with versioned configuration\n",
+		  "rm -rf /usr/share/tomcat6/.jenkins\n",
+		  "git clone git@github.com:stelligent/devopsinthecloudjenkins.git /usr/share/tomcat6/.jenkins\n",
+		
+		  "# Installing Ruby 1.9.3 from RPM\n",
+		  "wget https://s3.amazonaws.com/stelligent-resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		
+		  "# Install Jenkins Plugins\n",
+		  "mkdir /usr/share/tomcat6/.jenkins/plugins\n",
+		  "cd /usr/share/tomcat6/.jenkins/plugins/\n",
+		  "wget https://s3.amazonaws.com/stelligent-resources/jenkins_plugins/git.hpi\n",
+		
+		  "# Install Bundler\n",
+		  "gem install bundler\n",
+		
+		  "# Tomcat Setup\n",
+		  "mkdir /usr/share/tomcat6/gem\n",
+		  "chown -R tomcat:tomcat /usr/share/tomcat6/\n",
+		  "service tomcat6 start\n",
+		  "/opt/aws/bin/cfn-signal", " -e 0", " '", {"Ref" : "WaitHandle"}, "'","\n",
+		
+		  "date > /home/ec2-user/stoptime"
+        ]]}}        
+      }
+    },
+
+    "IPAddress" : {
+      "Type" : "AWS::EC2::EIP"
+    },
+    
+    "IPAssoc" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "InstanceId" : { "Ref" : "WebServer" },
+        "EIP" : { "Ref" : "IPAddress" }
+       }
+    },
+    
+    "FrontendGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH and access to Apache and Tomcat",
+        "SecurityGroupIngress" : [
+          {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
+	      {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+		  {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"}
+        ]
+      }      
+    },
+
+	"WaitHandle" : {
+      "Type" : "AWS::CloudFormation::WaitConditionHandle"
+    },
+    
+    "WaitCondition" : {
+      "Type" : "AWS::CloudFormation::WaitCondition",
+      "DependsOn" : "WebServer",
+      "Properties" : {
+        "Handle" : { "Ref" : "WaitHandle" },
+        "Timeout" : "1200"
+      }
+    }          
+  },
+  
+  "Outputs" : {
+    "InstanceIPAddress" : {
+      "Value" : { "Ref" : "IPAddress" }
+    }
+  }
+}
