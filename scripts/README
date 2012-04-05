@@ -1,0 +1,7 @@
+To utilize the Jenkins Versioning script:
+
+1. Create a new Git project in Github for the Jenkins configuration
+2. Create public and private SSH RSA Keys 
+3. Add the public SSH key to the Github project
+4. Perform a clone of your project into /usr/share/tomcat6/
+4. Put the script into /etc/cron.hourly/
