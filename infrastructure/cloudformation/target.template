@@ -8,7 +8,7 @@
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type" : "String",
-      "Default" : "manatee_dev",
+      "Default" : "stelligentwebsite",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[-_ a-zA-Z0-9]*",
@@ -26,18 +26,11 @@
   "Mappings" : {
     "AWSInstanceType2Arch" : {
       "t1.micro"    : { "Arch" : "64" },
-      "m1.small"    : { "Arch" : "32" },
       "m1.large"    : { "Arch" : "64" },
-      "m1.xlarge"   : { "Arch" : "64" },
-      "m2.xlarge"   : { "Arch" : "64" },
-      "m2.2xlarge"  : { "Arch" : "64" },
-      "m2.4xlarge"  : { "Arch" : "64" },
-      "c1.medium"   : { "Arch" : "64" },
-      "c1.xlarge"   : { "Arch" : "64" },
-      "cc1.4xlarge" : { "Arch" : "64" }
+      "c1.medium"   : { "Arch" : "64" }
     },
     "AWSRegionArch2AMI" : {
-      "us-east-1"      : { "32" : "ami-ed65ba84", "64" : "ami-e565ba8c" }
+      "us-east-1"      : { "64" : "ami-7341831a" }
     }
   },
     
@@ -73,25 +66,24 @@
           "config" : {
             "packages" : {
               "yum" : {
-                "puppet"   : [],
-                "git"      : [],
+                "puppet"   : []
               }
             },
 
-            "sources" : {
-              "/opt/aws/apitools/" : "https://s3.amazonaws.com/sea2shore/resources/binaries/CloudFormation-CLI.zip"
-            },
+			"sources" : {
+				"/home/ec2-user/modules/passenger/" : "https://s3.amazonaws.com/stelligent-resources/puppet_modules/passenger.tar.gz\n"
+			},
 
 			"files" : {
-			  "/home/ec2-user/" : {
+			  "/home/ec2-user/modules/passenger/manifests/params.pp" : {
                 "content" : { "Fn::Join" : ["", [
-				  "class mysql::params {\n",
+				  "class passenger::params {\n",
 					"$resource_url = 'https://s3.amazonaws.com/sea2shore/resources/rpm'\n",
 				  "}"
                   ]]},
                 "mode"   : "000777",
-                "owner"  : "ec2-user",
-                "group"  : "ec2-user"
+                "owner"  : "root",
+                "group"  : "root"
               }
 			}
           }
@@ -105,14 +97,26 @@
         "KeyName"        : { "Ref" : "KeyName" },
 		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
 		  "#!/bin/bash -v\n",
+		  "yum update -y aws-cfn-bootstrap\n",
+		  "yum install -y pkgconfig\n",
+		
+		  "# Installing Ruby 1.9.3 from RPM\n",
 		  "wget https://s3.amazonaws.com/sea2shore/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
 		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
-		  "yum -y install libcurl-devel openssl-devel mysql-devel gcc make gcc-c++ openssl-devel zlib-devel git libxslt-devel sqlite-devel\n",
-		  "gem install bundler passenger --no-rdoc --no-ri\n",
+
+          "# Install packages\n",
+          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
+          "    --access-key ",  { "Ref" : "HostKeys" },
+          "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+          "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+          "# puppet apply --modulepath=/home/ec2-user/modules -e 'include passenger'\n",
 		  "git clone git://github.com/railstutorial/sample_app.git /var/www/rails\n",
+		
 		  "cd /var/www/rails\n",
 		  "bundle install\n",
 		  "rake db:migrate\n",
+		
 		  "passenger start -p 80"
 		]]}}
       }

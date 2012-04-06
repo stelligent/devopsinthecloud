@@ -8,7 +8,7 @@
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type" : "String",
-	  "Default" : "utility",
+	  "Default" : "aws",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[-_ a-zA-Z0-9]*",
@@ -27,13 +27,12 @@
   "Mappings" : {
     "AWSInstanceType2Arch" : {
       "t1.micro"    : { "Arch" : "64" },
-      "m1.small"    : { "Arch" : "32" },
       "m1.large"    : { "Arch" : "64" },
       "m1.xlarge"   : { "Arch" : "64" },
       "m2.xlarge"   : { "Arch" : "64" },
       "m2.2xlarge"  : { "Arch" : "64" },
       "m2.4xlarge"  : { "Arch" : "64" },
-      "c1.medium"   : { "Arch" : "32" },
+      "c1.medium"   : { "Arch" : "64" },
       "c1.xlarge"   : { "Arch" : "64" },
       "cc1.4xlarge" : { "Arch" : "64" }
     },
@@ -100,7 +99,9 @@
 		
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "# ADD YOUR GITHUB HOST HERE"
+	              "|1|GL7MpJoXdKJ3yvsl2qWhkO3mjhg=|d6Jp8PtBhNacqlLz1FlP2Kq6myw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\n",
+
+	              "|1|f3TTBTX+Otv7WVILCGk5uwCg708=|aYLFxK2RQJ/qhUa6EnBBncilo2E= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
 	            ]]},
 	            "mode"   : "000644",
 	            "owner"  : "tomcat",
@@ -108,15 +109,42 @@
 	          },
 			  "/usr/share/tomcat6/.ssh/id_rsa" : {
 	            "content" : { "Fn::Join" : ["", [
-				  "# ADD YOUR JENKINS SERVER PRIVATE KEY HERE"
+	              "-----BEGIN RSA PRIVATE KEY-----\n",
+				  "MIIEoQIBAAKCAQEAtOctxsvFuM4SKcIlelzQmZSWb7zBbxjd8JEZ/9xHWApWcpN8\n",
+				  "XxRtqXBT9eLreg0c4nNmFTHVVhBhRj/gpAr9HHS9VkAe88EnGRjMFHBfrQOlsIBr\n",
+				  "18yhh8XL71ra4/xasMBWkJvfvBTwthWEKER374UXOGH2S7UMUoY507ASfWm6xU7V\n",
+				  "MQmY/NkxBb0vXVT9mGitvr4uieDJLiysvApxC2xEsZs4fCDhym8Rf44xJRPJCkKu\n",
+			      "CdNy6I1xL9dpiLH17cMGVzFtImknm/22GUMfky9f+GGaxT/tGjWJd4CprsGt8nnr\n",
+				  "CSpmynUvZzea/QsQLD0mHyOs1RyNGDrLdXsy3QIBIwKCAQEAi43EOkVspIG2PXiD\n",
+				  "T8PxYIiRTuIRkDfBJ0tdMxekwEJ9M9DcSVjm4cuue9rwKvQsOal6oqLJJSKULuDR\n",
+				  "3aITtt22oZ8t0ftnTd/t4+Go5I3I9d9pItEO5RTtx0YWkp4aE1KL6+X1vPo2CM7F\n",
+				  "CR7gLc0R6aqoDoRZ9oTNhgt7+leTYjDpcBsHnhcNwMlVMV7340PbFh5cVSt3Txms\n",
+			  	  "SJ0yB00tWVQhVPoM3vJCpRqJSSllhS0AVXK8fSRtApwtUWteLiHMh2zZ2397r6uu\n",
+				  "XR3wB6mdHtfFFdS5x9m5vzO/jKk0UhqOyfbCuek5IX08Ww2Lq75fYNspE6W5h3VH\n",
+				  "zqJHJwKBgQDptPRv01W0so/xeEnlLLfxs4sqUV4DP1Iiann2q7dWg0gR3GbGjR4n\n",
+				  "XELhPTkal3TLttRmeykaGoqcuUrog8qVpC+n7F2vCIZR8q1k26J3EkfabW9dROPY\n",
+				  "LFdej0koe9gJqkaCxFmKEM2SRfBNZ0Lf+VuwEA+lfGSVlDzA7YFMXwKBgQDGKMWo\n",
+				  "igKhhtYHzG5NiFFYx75w6Gg4V2lE/liK4ZpLdTHukNDebeSD0eiqdcpklxP+d2Na\n",
+				  "FmrysIfCaa8W3bsCpXqEscthUq9bQNoQZhsJDqzWUAB26M0RI7D3wPRscxfIwVNZ\n",
+				  "1rbpyKix4udUrfj/4njndRRgUjZ4yurAaSeKQwKBgH7ek1Kl7LKM0cw5/DqUnl6j\n",
+				  "S4wASPpy1NDatzzDngpkhjWU51XXlAa9Dl0D+m2Fa0oEKikBB68VuPX+L/qQr82T\n",
+				  "pNeAUB0wg25QigONLE9EcCYeJoMWxNRv16hcaYsBZqYpPDhb9he/+pE76NmP09ir\n",
+				  "7/Hc1Us05iVQeMCA7mtJAoGAYD+wdm7rVcUmIQuGCGbIbPNN3xHMOJ98RhUjsSu/\n",
+				  "+MPlDXmKBaMXOLZpseFw7weNXlc+4p0socN1I+oweNIZAUkPn4mOq50wmgmOfP5k\n",
+				  "5yRik/r46UyA3HBr5g1DhSH1nAYhK6LN30Q0rixhu2pxoNu3EVYf1wNcSUyd6G2W\n",
+				  "3MECgYBnBuUOVhakvhNhvFztrtjiNWUXZWFDSE2ECY9Cx+ctLTQyjNYUANiGS+hg\n",
+				  "5x14K5KRb9nc7s56hUd75yaUz1+YI1AJXP9CiIn760vQP/pjM76wi3Du0Kh75859\n",
+				  "2AhJlUzOA/iaeEier/FKiWTFXh4Q5RA6sau7uJYqLY2LAzSZgw==\n",
+				  "-----END RSA PRIVATE KEY-----\n"
 	            ]]},
 	            "mode"   : "000600",
 	            "owner"  : "tomcat",
 	            "group"  : "tomcat"
 	          },
+	
 			  "/usr/share/tomcat6/.ssh/id_rsa.pub" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "# ADD YOUR PUBLIC KEY OF JENKINS SERVER HERE"
+	              "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtOctxsvFuM4SKcIlelzQmZSWb7zBbxjd8JEZ/9xHWApWcpN8XxRtqXBT9eLreg0c4nNmFTHVVhBhRj/gpAr9HHS9VkAe88EnGRjMFHBfrQOlsIBr18yhh8XL71ra4/xasMBWkJvfvBTwthWEKER374UXOGH2S7UMUoY507ASfWm6xU7VMQmY/NkxBb0vXVT9mGitvr4uieDJLiysvApxC2xEsZs4fCDhym8Rf44xJRPJCkKuCdNy6I1xL9dpiLH17cMGVzFtImknm/22GUMfky9f+GGaxT/tGjWJd4CprsGt8nnrCSpmynUvZzea/QsQLD0mHyOs1RyNGDrLdXsy3Q== b.jakovich@gmail.com"
 	            ]]},
 	            "mode"   : "000644",
 	            "owner"  : "tomcat",
