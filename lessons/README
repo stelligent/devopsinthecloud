@@ -14,7 +14,7 @@ Lesson Introduction
 1.7    Make a change to the infrastructure scripts
 1.8    Run Jenkins Continuous Integration server jobs
 1.9    View and run jobs within a deployment pipeline
-1.10    View static analysis reports in Sonar
+1.10    View static analysis reports
 1.11    View feedback from a dashboard
 
 Lesson 2: DevOps, Continuous Delivery, Continuous Deployment and the Cloud (15m)
@@ -81,10 +81,10 @@ Lesson Introduction
 Lesson 7: Configuration Management (15m)
 
 Lesson Introduction
-7.1    Work from the Canonical Version
-7.2    Version System Configurations and other Artifacts
-7.3    How to Setup a Dynamic Configuration Management Database
-7.4    Develop Collective Ownership to all Artifacts
+7.1    Work from the canonical version
+7.2    Version system configurations and other artifacts
+7.3    Setup a dynamic configuration management database
+7.4    Develop collective ownership to all artifacts
 
 Lesson 8: Database (20m)
 
@@ -123,6 +123,6 @@ Lesson 12: Advanced Topics (20m)
 Lesson Introduction
 12.1    The basics of using a Platform as a Service solution such as Heroku
 12.2    Other infrastructure automation tools such as Chef and Bcfg2
-12.3    More on Cloud-specific tools such as NoSQL databases and other AWS tools
+12.3    More on cloud-specific tools such as NoSQL databases and other AWS tools
 12.4    Secure data in transit and at rest
 12.5    Do a basic setup of AWS Virtual Private Cloud
