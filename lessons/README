@@ -1,4 +1,4 @@
-DevOps in the Cloud High-Level Outline
+DevOps in the Cloud Outline
 
 Introduction (5m)
 
@@ -125,3 +125,6 @@ Lesson Introduction
 12.3    More on cloud-specific tools such as NoSQL databases and other AWS tools
 12.4    Secure data in transit and at rest
 12.5    Do a basic setup of AWS Virtual Private Cloud
+
+copyright 2012 Pearson Education, Inc.
+
