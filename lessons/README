@@ -109,7 +109,6 @@ Lesson Introduction
 10.4    Write scripted acceptance tests
 10.5    Write scripted infrastructure tests
 10.6    Write scripted deployment (smoke) tests
-
 10.7    Run tests in parallel across multiple instances using Elastic Load Balancing and Auto Scaling
 10.8    Get feedback on test results from your Continuous Integration system
 
