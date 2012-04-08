@@ -133,6 +133,7 @@
 	          },
 			  "/usr/share/tomcat6/.ssh/id_rsa" : {
 	            "content" : { "Fn::Join" : ["", [
+				  
 	            ]]},
 	            "mode"   : "000600",
 	            "owner"  : "tomcat",
@@ -216,6 +217,7 @@
         "InstanceType"   : { "Ref" : "InstanceType" },
         "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
+		"Tags" : [{ "Key" : "Type", "Value" : "Jenkins" }],
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -v\n",
 		  "date > /home/ec2-user/starttime\n",
