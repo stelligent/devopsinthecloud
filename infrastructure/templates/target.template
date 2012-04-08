@@ -167,7 +167,7 @@
     "FrontendGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
-        "GroupDescription" : "Enable SSH and access to Apache and Tomcat",
+        "GroupDescription" : "Enable SSH and access to Apache",
         "SecurityGroupIngress" : [
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"}
@@ -186,8 +186,7 @@
         "Handle" : { "Ref" : "WaitHandle" },
         "Timeout" : "1200"
       }
-    }          
-  },     
+    }     
   },
   
   "Outputs" : {
