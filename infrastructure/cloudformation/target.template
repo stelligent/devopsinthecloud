@@ -8,7 +8,7 @@
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type" : "String",
-      "Default" : "stelligentwebsite",
+      "Default" : "aws",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[-_ a-zA-Z0-9]*",
@@ -20,7 +20,16 @@
       "Type" : "String",
       "Default" : "c1.medium",
       "ConstraintDescription" : "must be a valid EC2 instance type."
-    }
+    },
+
+	"ApplicationName" : {
+	  "Type" : "String",
+	  "Default" : "target"
+	},
+	"HostedZone" : {
+	  "Type" : "String",
+	  "Default" : "devopscloud.com"
+	}
   },
   
   "Mappings" : {
@@ -40,6 +49,9 @@
       "Type" : "AWS::IAM::User",
       "Properties" : {
         "Path": "/",
+		"LoginProfile" : {
+			"Password" : "aux1298"
+		},
         "Policies": [{
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
@@ -59,6 +71,20 @@
       }
     },
 
+	"Domain" : {
+      "Type" : "AWS::Route53::RecordSetGroup",
+	  "Properties" : {
+	    "HostedZoneName" : { "Fn::Join" : [ "", [ {"Ref" : "HostedZone"}, "." ]]},
+	    "RecordSets" : [
+		  {
+			"Name" : { "Fn::Join" : ["", [ { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "." ]]},
+			"Type" : "A",
+			"TTL"  : "900",
+			"ResourceRecords" : [ { "Ref" : "IPAddress" } ]
+		  }]
+	  }
+	},
+
     "WebServer": {  
       "Type": "AWS::EC2::Instance",
 	  "Metadata" : {
@@ -71,14 +97,18 @@
             },
 
 			"sources" : {
-				"/home/ec2-user/modules/passenger/" : "https://s3.amazonaws.com/stelligent-resources/puppet_modules/passenger.tar.gz\n"
+				"/home/ec2-user/" : "https://s3.amazonaws.com/stelligentlabs/puppet.tar.gz\n"
 			},
 
 			"files" : {
-			  "/home/ec2-user/modules/passenger/manifests/params.pp" : {
+			  "/home/ec2-user/nodes.pp" : {
                 "content" : { "Fn::Join" : ["", [
-				  "class passenger::params {\n",
-					"$resource_url = 'https://s3.amazonaws.com/sea2shore/resources/rpm'\n",
+				  "node default {\n",
+					"include system\n",
+				    "include bundler\n",
+				    "include passenger\n",
+				    "include sqlite\n",
+				    "include git\n",
 				  "}"
                   ]]},
                 "mode"   : "000777",
@@ -98,11 +128,6 @@
 		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
 		  "#!/bin/bash -v\n",
 		  "yum update -y aws-cfn-bootstrap\n",
-		  "yum install -y pkgconfig\n",
-		
-		  "# Installing Ruby 1.9.3 from RPM\n",
-		  "wget https://s3.amazonaws.com/sea2shore/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
-		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
 
           "# Install packages\n",
           "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
@@ -110,14 +135,14 @@
           "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
           "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
 
-          "# puppet apply --modulepath=/home/ec2-user/modules -e 'include passenger'\n",
+          "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
 		  "git clone git://github.com/railstutorial/sample_app.git /var/www/rails\n",
 		
 		  "cd /var/www/rails\n",
 		  "bundle install\n",
 		  "rake db:migrate\n",
 		
-		  "passenger start -p 80"
+		  "nohup passenger start -p 80 &"
 		]]}}
       }
     },
@@ -141,7 +166,6 @@
         "SecurityGroupIngress" : [
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
-          {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"}
         ]
       }      
     }     
