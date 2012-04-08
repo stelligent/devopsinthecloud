@@ -109,12 +109,44 @@
 				    "include passenger\n",
 				    "include sqlite\n",
 				    "include git\n",
+					"include httpd\n",
 				  "}"
                   ]]},
                 "mode"   : "000777",
                 "owner"  : "root",
                 "group"  : "root"
-              }
+              },
+
+			"/etc/httpd/conf/virtualhosts" : {
+	            "content" : { "Fn::Join" : ["", [
+	              "NameVirtualHost *:80\n",
+	              "<VirtualHost *:80>\n",
+	              "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+	              "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+				  "DocumentRoot /var/www/rails/public\n",
+				  "<Directory /somewhere/public>\n",
+				     "AllowOverride all\n",
+				     "Options -MultiViews\n",
+				  "</Directory>\n",
+	              "AllowCONNECT 8080\n",
+	              "ProxyPass / http://localhost:8080/\n",
+	              "ProxyPassReverse / http://localhost:8080/\n",
+	              "</VirtualHost>\n"
+	            ]]},
+	                "mode"   : "000777",
+	                "owner"  : "root",
+	                "group"  : "root"
+	          },
+			"/etc/httpd/conf/passenger" : {
+	            "content" : { "Fn::Join" : ["", [
+	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.11/ext/apache2/mod_passenger.so\n",
+	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.11\n",
+	              "PassengerRuby /usr/bin/ruby"
+	            ]]},
+	                "mode"   : "000777",
+	                "owner"  : "root",
+	                "group"  : "root"
+	          },
 			}
           }
         }
@@ -144,7 +176,10 @@
 		  "bundle install\n",
 		  "rake db:migrate\n",
 		
-		  "passenger start -p 80 &\n",
+		  "passenger-install-apache2-module --auto\n",
+		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
+		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
+		
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", {"Ref" : "WaitHandle"}, "'","\n",
 
 		  "date > /home/ec2-user/stoptime"
