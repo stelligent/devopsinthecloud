@@ -1,0 +1,130 @@
+DevOps in the Cloud Outline
+
+Introduction (5m)
+
+Lesson 1: Deploying a Working Software Application to the Cloud (15m)
+
+Lesson Introduction
+1.1     Check in changes to application code
+1.2    Make simple configuration changes
+1.3     Change an existing automated test
+1.4     Make scripted changes to the database
+1.5    Make a change to a simple build script
+1.6    Make a change to a deployment script
+1.7    Make a change to the infrastructure scripts
+1.8    Run Jenkins Continuous Integration server jobs
+1.9    View and run jobs within a deployment pipeline
+1.10    View static analysis reports
+1.11    View feedback from a dashboard
+
+Lesson 2: DevOps, Continuous Delivery, Continuous Deployment and the Cloud (15m)
+
+Lesson Introduction
+2.1    Define Continuous Delivery, DevOps, Continuous Deployment and the Cloud
+2.2    Practices, patterns and tools for implementing Continuous Delivery in the Cloud
+2.3    Create a ‘spaghetti diagram’ and a ‘value-stream map’
+
+Lesson 3: Amazon Web Services (40m)
+
+Lesson Introduction
+3.1    Create an Amazon Web Services (AWS) account and access services
+3.2    The basics of the AWS Management Console
+3.3    Define security groups
+3.4    The basics of Elastic Compute Cloud (EC2) virtual instances
+3.5    Use Elastic Load Balancing
+3.6    Employ Auto Scaling
+3.7    Use Amazon CloudWatch to monitor resources
+3.8    Use Amazon Route 53 to manage a domain
+3.9    Use Amazon Simple Storage Service (S3) to store objects
+3.10    The basics of AWS CloudFormation for automating infrastructures
+3.11    The basics of AWS Elastic Beanstalk
+3.12    The basics of some other available AWS services
+
+Lesson 4: Development and Continuous Integration (25m)
+
+Lesson Introduction
+4.1    Set up your development environment
+4.2    Run a Jenkins Continuous Integration server using Elastic Beanstalk
+4.3    Install and configure Jenkins plug-ins
+4.4    Configure a scripted environment job
+4.5    Configure a scripted build job
+4.6    Configure a scripted deployment job
+4.7    Configure and run on-demand jobs
+4.8    Configure and run scheduled jobs
+4.9    Configure and run continuous jobs
+4.10    ‘Stop the line’ when a problem occurs
+4.11    Configure build thresholds
+4.12    Create continuous feedback mechanisms
+4.13    Configure and view a ‘big visible dashboard’
+
+Lesson 5: Infrastructure Automation (45m)
+
+Lesson Introduction
+5.1    Create a CloudFormation template
+5.2    Integrate Puppet with CloudFormation
+5.3    Create a single-command environment
+5.4    Design a test-driven infrastructure
+5.5    Create a transient environment
+5.6    Lock down environments
+5.7    Create a ‘Chaos Monkey’
+5.8    Create production-like environments
+
+Lesson 6: Building and Deploying Software (30m)
+
+Lesson Introduction
+6.1    Script a build
+6.2    Script a deployment
+6.3    Set up and utilize a dependency-management repository
+6.4    Deploy to target environments
+6.5    Perform a self-service deployment
+
+Lesson 7: Configuration Management (15m)
+
+Lesson Introduction
+7.1    Work from the canonical version
+7.2    Version system configurations and other artifacts
+7.3    Setup a dynamic configuration management database
+7.4    Develop collective ownership to all artifacts
+
+Lesson 8: Database (20m)
+
+Lesson Introduction
+8.1    Script a database
+8.2    Script the upgrade and downgrade of a database
+8.3    Use a database sandbox
+8.4    Version a database
+
+Lesson 9: Static Analysis (15m)
+
+Lesson Introduction
+9.1    Run static analysis tools
+9.2    Get static analysis reports from your Continuous Integration system
+
+Lesson 10: Testing (30m)
+
+Lesson Introduction
+10.1    Write scripted unit tests
+10.2    Write scripted integration tests
+10.3    Write scripted functional tests
+10.4    Write scripted acceptance tests
+10.5    Write scripted infrastructure tests
+10.6    Write scripted deployment (smoke) tests
+10.7    Run tests in parallel across multiple instances using Elastic Load Balancing and Auto Scaling
+10.8    Get feedback on test results from your Continuous Integration system
+
+Lesson 11: Deployment Pipeline (10m)
+
+Lesson Introduction
+11.1    Configure and run a deployment pipeline in Jenkins
+
+Lesson 12: Advanced Topics (20m)
+
+Lesson Introduction
+12.1    The basics of using a Platform as a Service solution such as Heroku
+12.2    Other infrastructure automation tools such as Chef and Bcfg2
+12.3    More on cloud-specific tools such as NoSQL databases and other AWS tools
+12.4    Secure data in transit and at rest
+12.5    Do a basic setup of AWS Virtual Private Cloud
+
+copyright 2012 Pearson Education, Inc.
+
