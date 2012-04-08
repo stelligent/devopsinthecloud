@@ -144,7 +144,7 @@
 		  "bundle install\n",
 		  "rake db:migrate\n",
 		
-		  "nohup passenger start -p 80 &\n",
+		  "passenger start -p 80 &\n",
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", {"Ref" : "WaitHandle"}, "'","\n",
 
 		  "date > /home/ec2-user/stoptime"
