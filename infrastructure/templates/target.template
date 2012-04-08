@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
   
-  "Description" : "CloudFormation Template to provision Manatee Jenkins instance",
+  "Description" : "CloudFormation Template to provision a target environment for the rails sample app",
   
   "Parameters" : {
       
@@ -128,7 +128,8 @@
 		"Tags" : [{ "Key" : "Type", "Value" : "Target Environment" }],
 		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
 		  "#!/bin/bash -v\n",
-		  "yum update -y aws-cfn-bootstrap\n",
+		  "date > /home/ec2-user/starttime\n",
+          "yum update -y aws-cfn-bootstrap\n",
 
           "# Install packages\n",
           "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
@@ -143,7 +144,10 @@
 		  "bundle install\n",
 		  "rake db:migrate\n",
 		
-		  "nohup passenger start -p 80 &"
+		  "nohup passenger start -p 80 &\n",
+		  "/opt/aws/bin/cfn-signal", " -e 0", " '", {"Ref" : "WaitHandle"}, "'","\n",
+
+		  "date > /home/ec2-user/stoptime"
 		]]}}
       }
     },
@@ -169,7 +173,21 @@
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"}
         ]
       }      
-    }     
+    },
+
+	"WaitHandle" : {
+      "Type" : "AWS::CloudFormation::WaitConditionHandle"
+    },
+    
+    "WaitCondition" : {
+      "Type" : "AWS::CloudFormation::WaitCondition",
+      "DependsOn" : "WebServer",
+      "Properties" : {
+        "Handle" : { "Ref" : "WaitHandle" },
+        "Timeout" : "1200"
+      }
+    }          
+  },     
   },
   
   "Outputs" : {
