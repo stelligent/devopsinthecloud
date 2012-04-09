@@ -146,7 +146,7 @@
 	                "mode"   : "000777",
 	                "owner"  : "root",
 	                "group"  : "root"
-	          },
+	          }
 			}
           }
         }
