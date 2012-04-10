@@ -157,7 +157,7 @@
         "InstanceType"   : { "Ref" : "InstanceType" },
         "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
-		"Tags" : [{ "Key" : "Type", "Value" : "Target Environment" }],
+		"Tags" : [{ "Key" : "Name", "Value" : "Target Environment" }],
 		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
 		  "#!/bin/bash -v\n",
 		  "date > /home/ec2-user/starttime\n",
