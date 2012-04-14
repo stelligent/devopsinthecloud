@@ -180,7 +180,7 @@
 		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
 		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
 		
-		  "/opt/aws/bin/cfn-signal", " -e 0", " '", {"Ref" : "WaitHandle"}, "'","\n",
+		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
 
 		  "date > /home/ec2-user/stoptime"
 		]]}}
