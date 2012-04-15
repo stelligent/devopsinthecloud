@@ -11,17 +11,23 @@ Feature: Scripted provisioning of target environment
         Then I should see "passenger"
     
     Scenario: Is the proper version of Ruby installed?
-      When I run "ruby -v"
-      Then I should see "ruby 1.8.7"
+        When I run "/usr/bin/ruby -v"
+        Then I should see "ruby 1.8.7"
     
-    Scenario: Is the proper version of Ruby installed?
-      When I run "httpd -v"
-      Then I should see "Apache"
+    Scenario: Is the proper version of Apache installed?
+        When I run "/usr/sbin/httpd -v"
+        Then I should see "2.2.22"
+        
+    Scenario: Is the Apache service running?
+        When I run "/sbin/chkconfig --list httpd"
+        Then I should see "3:on"
         
     Scenario: Httpd conf should have passenger variables
-        When I read "/etc/httpd/conf/httpd.conf"
-        Then "PassengerRoot" should equal "/usr/lib/ruby/gems/1.8/gems/passenger-3.0.11"
+        When I scrape "/etc/httpd/conf/httpd.conf"
+        Then "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.11" should be present 
         
-    Scenario 
+    Scenario: Httpd conf should have a virtual host added
+        When I scrape "/etc/httpd/conf/httpd.conf"
+        Then "NameVirtualHost \*:80" should be present
         
     

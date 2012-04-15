@@ -232,6 +232,7 @@
 		  "gem install bundler\n",
 		  "gem install aws-sdk\n",
 		  "gem install cucumber\n",
+		  "gem install net-ssh\n",
 		
 		  "# Add Tomcat user to sudoers and disable tty\n",
 		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
