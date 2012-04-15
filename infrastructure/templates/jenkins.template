@@ -63,27 +63,17 @@
 		},
         "Policies": [
 		  {
-            "PolicyName": "cloudformation",
+            "PolicyName": "Admin",
             "PolicyDocument": 
 			  { "Statement": [
 				{
             	  "Effect":"Allow",
-                  "Action":"cloudformation:DescribeStackResource",
+                  "Action":"*",
                   "Resource":"*"
 				}
 			]}
-          },
-		  {
-			"PolicyName": "s3",
-            "PolicyDocument":
-			  { "Statement": [
-				{
-            	  "Effect":"Allow",
-                  "Action":"s3:*",
-                  "Resource":"*"
-				}
-			]}
-		  }]
+          }
+		]
       }
     },
 
@@ -144,9 +134,7 @@
 		
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "|1|GL7MpJoXdKJ3yvsl2qWhkO3mjhg=|d6Jp8PtBhNacqlLz1FlP2Kq6myw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\n",
-
-	              "|1|f3TTBTX+Otv7WVILCGk5uwCg708=|aYLFxK2RQJ/qhUa6EnBBncilo2E= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
+	              "|1|GL7MpJoXdKJ3yvsl2qWhkO3mjhg=|d6Jp8PtBhNacqlLz1FlP2Kq6myw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\n"
 	            ]]},
 	            "mode"   : "000644",
 	            "owner"  : "tomcat",
@@ -196,8 +184,8 @@
 	            "group"  : "tomcat"
 	          },
 	
-			  "/etc/cron.hourly/jenkins_backup.sh" : {
-				"source" : "https://s3.amazonaws.com/stelligentlabs/terminate.rb", 
+			  "/etc/cron.hourly/jenkins_versioning.sh" : {
+				"source" : "https://s3.amazonaws.com/stelligentlabs/jenkins_versioning.sh", 
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
@@ -243,6 +231,7 @@
 		  "# Install Bundler\n",
 		  "gem install bundler\n",
 		  "gem install aws-sdk\n",
+		  "gem install cucumber\n",
 		
 		  "# Add Tomcat user to sudoers and disable tty\n",
 		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
@@ -250,8 +239,8 @@
 		  "echo \"Defaults:tomcat !requiretty\" >> /etc/sudoers\n",
 		
 		  "# Add AWS Credentials to Tomcat\n",
-		  "echo \"AWS_ACCESS_KEY=AKIAJFZQBVNQF7EUER6A\" >> /etc/sysconfig/tomcat6\n",
-		  "echo \"AWS_SECRET_ACCESS_KEY=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\" >> /etc/sysconfig/tomcat6\n",
+		  "echo \"AWS_ACCESS_KEY=", { "Ref" : "HostKeys" }, "\" >> /etc/sysconfig/tomcat6\n",
+		  "echo \"AWS_SECRET_ACCESS_KEY=", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\" >> /etc/sysconfig/tomcat6\n",
 		  "echo \"AWS_CLOUDFORMATION_HOME=/opt/aws/apitools/cfn/\" >> /etc/sysconfig/tomcat6\n",
 		
 		  "# Add CloudFormation CLI tools\n",
@@ -259,9 +248,9 @@
 		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
 		
 		  "# Tomcat Setup\n",
-		  "mkdir /usr/share/tomcat6/gem\n",
 		  "chown -R tomcat:tomcat /usr/share/tomcat6/\n",
 		  "service tomcat6 start\n",
+		
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
 		
 		  "date > /home/ec2-user/stoptime"
