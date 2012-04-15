@@ -175,15 +175,6 @@
 	            "group"  : "tomcat"
 	          },
 	
-			  "/usr/share/tomcat6/.ssh/id_rsa.pub" : {
-	            "content" : { "Fn::Join" : ["", [
-	              "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtOctxsvFuM4SKcIlelzQmZSWb7zBbxjd8JEZ/9xHWApWcpN8XxRtqXBT9eLreg0c4nNmFTHVVhBhRj/gpAr9HHS9VkAe88EnGRjMFHBfrQOlsIBr18yhh8XL71ra4/xasMBWkJvfvBTwthWEKER374UXOGH2S7UMUoY507ASfWm6xU7VMQmY/NkxBb0vXVT9mGitvr4uieDJLiysvApxC2xEsZs4fCDhym8Rf44xJRPJCkKuCdNy6I1xL9dpiLH17cMGVzFtImknm/22GUMfky9f+GGaxT/tGjWJd4CprsGt8nnrCSpmynUvZzea/QsQLD0mHyOs1RyNGDrLdXsy3Q== b.jakovich@gmail.com"
-	            ]]},
-	            "mode"   : "000644",
-	            "owner"  : "tomcat",
-	            "group"  : "tomcat"
-	          },
-	
 			  "/etc/cron.hourly/jenkins_versioning.sh" : {
 				"source" : "https://s3.amazonaws.com/stelligentlabs/jenkins_versioning.sh", 
 		        "mode"   : "000500", 
