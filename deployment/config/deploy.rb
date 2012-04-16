@@ -32,15 +32,15 @@ namespace :deploy do
   end
   
   task :start, :roles => :app do
-    run "touch #{current_release}/tmp/restart.txt"
+    run "sudo service http start"
   end
 
   task :stop, :roles => :app do
-    # Do nothing.
+    run "sudo service http stop"
   end
 
   desc "Restart Application"
   task :restart, :roles => :app do
-    run "cd #{deploy_to} && sudo passenger start -p 80 --user=ec2-user"
+    run "sudo service http restart"
   end
 end
