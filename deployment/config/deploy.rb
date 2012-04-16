@@ -16,7 +16,7 @@ after "deploy:deploy", "deploy:bundle_install"
 after "deploy:bundle_install", "deploy:db_migrate"
 after "deploy:db_migrate", "deploy:restart"
 
-namespace :deploy 
+namespace :deploy
   task :deploy do
     run "cd #{deploy_to} && sudo wget https://s3.amazonaws.com/stelligentlabs/devopsinthecloud.tar.gz"
     run "cd #{deploy_to} && sudo tar -zxvf devopsinthecloud.tar.gz"
@@ -39,8 +39,7 @@ namespace :deploy
     # Do nothing.
   end
 
-  desc "Restart Application"
   task :restart, :roles => :app do
-    run "passenger start -p 80"
+    run "cd #{deploy_to} && passenger start -p 80"
   end
 end
