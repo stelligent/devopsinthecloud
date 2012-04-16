@@ -32,15 +32,15 @@ namespace :deploy do
   end
   
   task :start, :roles => :app do
-    run "sudo service http start"
+    run "sudo service httpd start"
   end
 
   task :stop, :roles => :app do
-    run "sudo service http stop"
+    run "sudo service httpd stop"
   end
 
   desc "Restart Application"
   task :restart, :roles => :app do
-    run "sudo service http restart"
+    run "sudo service httpd restart"
   end
 end
