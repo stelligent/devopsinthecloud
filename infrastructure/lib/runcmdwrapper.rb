@@ -7,8 +7,6 @@ class RunCmdWrapper
     def initialize(args = {})
         @host = args[:host] || 'localhost'
         ssh_opts = {}
-        ssh_opts[:password] = args[:password] if args[:password]
-        ssh_opts[:keys] = '/usr/share/tomcat6/.ssh/id_rsa'
         @ssh = Net::SSH.start(args[:host], args[:user], ssh_opts) if args[:host]
     end
 
