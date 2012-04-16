@@ -41,6 +41,6 @@ namespace :deploy do
 
   desc "Restart Application"
   task :restart, :roles => :app do
-    run "cd #{deploy_to} && passenger start -p 80"
+    run "cd #{deploy_to} && sudo passenger start -p 80 --user=ec2-user"
   end
 end
