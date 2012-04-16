@@ -1,6 +1,6 @@
 require "net/ssh"
 
-class RunCmdWrapper
+class RunCommand
     attr_reader :last_cmd_output
     attr_accessor :base_directory
 
