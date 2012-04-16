@@ -18,9 +18,9 @@ after "deploy:db_migrate", "deploy:restart"
 
 namespace :deploy do
   task :deploy do
-    run "sudo cd #{deploy_to} && wget https://s3.amazonaws.com/stelligentlabs/devopsinthecloud.tar.gz"
-    run "sudo cd #{deploy_to} && tar -zxvf devopsinthecloud.tar.gz"
-    run "sudo cd #{deploy_to} && rm devopsinthecloud.tar.gz"
+    run "cd #{deploy_to} && sudo wget https://s3.amazonaws.com/stelligentlabs/devopsinthecloud.tar.gz"
+    run "cd #{deploy_to} && sudo tar -zxvf devopsinthecloud.tar.gz"
+    run "cd #{deploy_to} && sudo rm devopsinthecloud.tar.gz"
   end
   
   task :bundle_install do
