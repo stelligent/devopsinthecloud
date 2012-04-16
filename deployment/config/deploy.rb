@@ -9,17 +9,20 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-set :scm, :git
-set :repository, 'git@github.com:stelligent/sample_app.git'
-set :branch, 'master'
 set :deploy_via, :remote_cache
 
 
-after "deploy", "deploy:bundle_install"
+after "deploy:deploy", "deploy:bundle_install"
 after "deploy:bundle_install", "deploy:db_migrate"
 after "deploy:db_migrate", "deploy:restart"
 
 namespace :deploy do
+  task :deploy do
+    run "sudo cd #{deploy_to} && wget https://s3.amazonaws.com/stelligentlabs/devopsinthecloud.tar.gz"
+    run "sudo cd #{deploy_to} && tar -zxvf devopsinthecloud.tar.gz"
+    run "sudo cd #{deploy_to} && rm devopsinthecloud.tar.gz"
+  end
+  
   task :bundle_install do
     run "cd #{deploy_to} && RAILS_ENV=production bundle install"
   end
