@@ -225,6 +225,7 @@
 		  "gem install aws-sdk\n",
 		  "gem install cucumber\n",
 		  "gem install net-ssh\n",
+		  "gem install capistrano\n",
 		
 		  "# Add Tomcat user to sudoers and disable tty\n",
 		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
@@ -239,6 +240,10 @@
 		  "# Add CloudFormation CLI tools\n",
 		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/stelligentlabs/CloudFormation-CLI.tar.gz\n",
 		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
+		
+		  "# Setup deployment directory\n",
+		  "mkdir /var/www/rails\n",
+		  "sudo chown -R ec2-user:ec2-user /var/www/rails\n",
 		
 		  "# Tomcat Setup\n",
 		  "chown -R tomcat:tomcat /usr/share/tomcat6/\n",

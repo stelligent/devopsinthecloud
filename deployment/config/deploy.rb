@@ -2,7 +2,7 @@ set :application, "rails"
 set :domain,      "target.devopscloud.com"
 set :user,        "ec2-user"
 set :use_sudo,    false
-set :deploy_to,   "/www/var/#{application}"
+set :deploy_to,   "/var/www/#{application}"
 set :ssh_options, {:forward_agent => true}
 
 role :app, domain
