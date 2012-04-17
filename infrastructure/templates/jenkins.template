@@ -18,7 +18,7 @@
     "InstanceType" : {
       "Description" : "WebServer EC2 instance type",
       "Type" : "String",
-      "Default" : "t1.micro",
+      "Default" : "c1.medium",
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
 
