@@ -131,14 +131,12 @@
 	              "<VirtualHost *:80>\n",
 	              "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
 	              "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+				  "rails_env development\n",
 				  "DocumentRoot /var/www/rails/public\n",
-				  "<Directory /somewhere/public>\n",
+				  "<Directory /var/www/rails/public>\n",
 				     "AllowOverride all\n",
 				     "Options -MultiViews\n",
 				  "</Directory>\n",
-	              "AllowCONNECT 8080\n",
-	              "ProxyPass / http://localhost:8080/\n",
-	              "ProxyPassReverse / http://localhost:8080/\n",
 	              "</VirtualHost>\n"
 	            ]]},
 	                "mode"   : "000500",
@@ -147,8 +145,8 @@
 	          },
 			"/etc/httpd/conf/passenger" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.11/ext/apache2/mod_passenger.so\n",
-	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.11\n",
+	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12/ext/apache2/mod_passenger.so\n",
+	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12\n",
 	              "PassengerRuby /usr/bin/ruby"
 	            ]]},
 	                "mode"   : "000500",
@@ -176,19 +174,24 @@
           "    --access-key ",  { "Ref" : "HostKeys" },
           "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
           "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
-
+		  
+		  "# Build environment using Puppet\n",
           "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
-		  "git clone git@github.com:stelligent/sample_app.git /var/www/rails\n",
 		
-		  "cd /var/www/rails\n",
-		  "bundle install\n",
-		  "rake db:migrate\n",
-		
+		  "# Add in virtual hosts config\n",
 		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
 		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
 		
 		  "# Add Public key for passwordless authentication from Jenkins Instance\n",
 		  "cat /home/ec2-user/id_rsa.pub >> /home/ec2-user/.ssh/authorized_keys\n",
+		
+		  "# Disable tty for ec2-user\n",
+		  "echo \"Defaults:%ec2-user !requiretty\" >> /etc/sudoers\n",
+		  "echo \"Defaults:ec2-user !requiretty\" >> /etc/sudoers\n",
+		
+		  "# Add deployment directory and give it correct ownership\n",
+		  "mkdir /var/www/rails\n",
+		  "chown -R /var/www/rails\n",
 		
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
 
