@@ -179,8 +179,8 @@
           "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
 		
 		  "# Add in virtual hosts config\n",
-		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
 		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
+		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
 		
 		  "# Add Public key for passwordless authentication from Jenkins Instance\n",
 		  "cat /home/ec2-user/id_rsa.pub >> /home/ec2-user/.ssh/authorized_keys\n",
