@@ -26,9 +26,15 @@
 	  "Type" : "String",
 	  "Default" : "target"
 	},
+	
 	"HostedZone" : {
 	  "Type" : "String",
 	  "Default" : "devopscloud.com"
+	},
+	
+	"EnvironmentType" : {
+	  "Type" : "String",
+	  "Default" : "development"
 	}
   },
   
@@ -131,7 +137,7 @@
 	              "<VirtualHost *:80>\n",
 	              "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
 	              "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
-				  "rails_env development\n",
+				  "RailsEnv ", {"Ref" : "HostedZone"}, "\n",
 				  "DocumentRoot /var/www/rails/public\n",
 				  "<Directory /var/www/rails/public>\n",
 				     "AllowOverride all\n",
@@ -147,7 +153,7 @@
 	            "content" : { "Fn::Join" : ["", [
 	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12/ext/apache2/mod_passenger.so\n",
 	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12\n",
-	              "PassengerRuby /usr/bin/ruby"
+	              "PassengerRuby /usr/bin/ruby\n"
 	            ]]},
 	                "mode"   : "000500",
 	                "owner"  : "root",
