@@ -105,7 +105,7 @@
 
 			"files" : {
 	          "/usr/share/tomcat6/webapps/jenkins.war" : { 
-		        "source" : "http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war", 
+		        "source" : "http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war",
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat" 
@@ -134,42 +134,14 @@
 		
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "|1|GL7MpJoXdKJ3yvsl2qWhkO3mjhg=|d6Jp8PtBhNacqlLz1FlP2Kq6myw= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\n"
+	              "github.com,207.97.227.239 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\n"
 	            ]]},
 	            "mode"   : "000644",
 	            "owner"  : "tomcat",
 	            "group"  : "tomcat"
 	          },
 			  "/usr/share/tomcat6/.ssh/id_rsa" : {
-	            "content" : { "Fn::Join" : ["", [
-				  "-----BEGIN RSA PRIVATE KEY-----\n",
-				  "MIIEogIBAAKCAQEAzlZTrCgVQ6YOlgv/RwjQWH4NZXwy4GuG950HI4zho3/fRgXk\n",
-				  "QRRIDR02bP+t4IrRwok3Gb2I+ix0FkCG/73UuJmxi/8sdOiIU1cV9ZlQIHRoLpkl\n",
-				  "L68IXkLVZlafY1gs7Gb3Rs8hzNaQSukXLHQxtNr/8WK0fiFLlHB1+gAVr35K63Nn\n",
-				  "iToRGkWJe7aYvuorLCZklHmB4w3OLybIFgMuhtUcoJAWYv2aR4vir5fbE6GSdRvj\n",
-			      "4IfYhbl3RkSAlv7QeaF1IJo1BD35EWfDuIhZts52+mgt5K9airIDUz9Jtr0Pp89c\n",
-				  "4nV0JcbxVEnSRc1Q1i1ubwHea268bGL4CGT01QIBIwKCAQBwAvo44o8zWiUs4fD6\n",
-				  "rQNjPR03F4lVQa+q/XjnabxRcU1R5fDwIPPp3KiEUEhylIB/jFEcmhcouQvRkL5Q\n",
-				  "URu0qzR/MsBcuL8Iq5403jLPyintaRQv1AvbZhwS+9LeKI1qY8gQfxJZQUcEGCKF\n",
-				  "2K1E6+oGsez0A3IsAokv8Wrbm1oSzNzZvhCrUaA6pchNvJqNkUi9fYbA6sk8/Nd2\n",
-			  	  "CnzvUzqm7BWYOqk7JsQzYx0pBwRnZz6bjNRCuFiuinliisjBw/HQjdFQ2mXGa9fZ\n",
-				  "4UYc0zksYy+fqOsVjXp5jGNxjHYNEGUvEn2zPvu+W77X9ncHSVUzPsSYBfpYKkpN\n",
-				  "y5OrAoGBAPrN5pNTXzgW9FqVO1GWD0AWpZyQGs+UvYSKxjcWd4DReYbBdYgyBmpz\n",
-				  "/qMsumMl8vm7eDjAssE/kCrpFBDqziTpbdEebSmRPvqRhWOUGAm6ugDR26SInNJD\n",
-				  "J+dpuu7vlZMyFDk8kApMgL+GA/n6yDry5ubiFEaDoJBEvgQwZy69AoGBANKcmi/o\n",
-				  "Hml24z2i3hmMLqX1xf6nTwrq8KELnEd28Z8k6rCQqwgYiyCBiTRnkq4Aa8aB5Xsp\n",
-				  "triwTvnYTEyzS/ZhKQGB/2FyREME5dKFm3CDnNbxuuDKLDWLoHAyCHsr4V+hCLoZ\n",
-				  "ShaBnEcexULYJB+tbpnCvVYuFACtp+Q7Nev5AoGBAOx4/fifEKKZTMpvcnF+2y3M\n",
-				  "Nb+Ajk6wz/H/L+rMCkZB2Ptl8nkZOT/Mc75sADGYzyX55mFlOtN2cfySneQQlnqS\n",
-				  "8oNXM7l6UVKmdnPUxjUPJGcsRB7J8vIiD65NvuFISzMDVOWCPqqf5xr6s0rH4Vwm\n",
-				  "2bUeTaGSDGrEeKTdLhYfAoGBAKJ4zrc+CNUD8SDrWuCCFVt0dCrY1pNkyEG4f99b\n",
-				  "wbVIXUZg+Ped56tcnQsrU+VQyCtrhSR/Q9BNfsC8zSU524OMx9yXe911Z9vt1dzq\n",
-				  "ub0yVGtMw1zzu7RHI/7HguKs0m5Xp6WBOSdOCtfHR7c5BeyNGs5jBxaYkxZ3VaFv\n",
-				  "gV5DAoGAKGpuSbuGmYOFfF8kVZsSwJ0Yj/o/kcUZsdbk00430EgY5ukukhKJxBai\n",
-				  "z59thTw5iY7Ebr73x4Fuv83E4K5etdSnZRoR545pK3pEFv8LNQr7BpmgFdG8VaE6\n",
-				  "UM3GfP+u5SuWCJSlrKXCpZ0sBET/hnkOLl2yUdISB+RYZVu28vs=\n",
-				  "-----END RSA PRIVATE KEY-----\n"
-	            ]]},
+				"source" : "https://s3.amazonaws.com/stelligentlabs-private/id_rsa",
 	            "mode"   : "000600",
 	            "owner"  : "tomcat",
 	            "group"  : "tomcat"
@@ -219,6 +191,9 @@
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/s3/0.2.0/s3.hpi\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/jenkins-cloudformation-plugin/0.9/jenkins-cloudformation-plugin.hpi\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/build-pipeline-plugin/1.2.3/build-pipeline-plugin.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/github-sqs-plugin/1.0/github-sqs-plugin.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/github-oauth/0.11/github-oauth.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/github/1.2/github.hpi\n",
 		
 		  "# Install Bundler\n",
 		  "gem install bundler\n",

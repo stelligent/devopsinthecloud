@@ -108,9 +108,7 @@
 
 			"files" : {
 			  "/home/ec2-user/id_rsa.pub" : {
-               "content" : { "Fn::Join" : ["", [
-			      "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAzlZTrCgVQ6YOlgv/RwjQWH4NZXwy4GuG950HI4zho3/fRgXkQRRIDR02bP+t4IrRwok3Gb2I+ix0FkCG/73UuJmxi/8sdOiIU1cV9ZlQIHRoLpklL68IXkLVZlafY1gs7Gb3Rs8hzNaQSukXLHQxtNr/8WK0fiFLlHB1+gAVr35K63NniToRGkWJe7aYvuorLCZklHmB4w3OLybIFgMuhtUcoJAWYv2aR4vir5fbE6GSdRvj4IfYhbl3RkSAlv7QeaF1IJo1BD35EWfDuIhZts52+mgt5K9airIDUz9Jtr0Pp89c4nV0JcbxVEnSRc1Q1i1ubwHea268bGL4CGT01Q== ec2-user@ip-10-244-215-223"
-                 ]]},
+			   "source" : "https://s3.amazonaws.com/stelligentlabs-private/id_rsa.pub",
                "mode"   : "000500",
                "owner"  : "root",
                "group"  : "root"
