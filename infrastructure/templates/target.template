@@ -56,7 +56,7 @@
       "Properties" : {
         "Path": "/",
 		"LoginProfile" : {
-			"Password" : "aux1298"
+			"Password" : "[aux1298]"
 		},
         "Policies": [{
           "PolicyName": "root",
