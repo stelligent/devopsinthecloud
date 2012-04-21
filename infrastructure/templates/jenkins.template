@@ -88,7 +88,7 @@
 	          "Action":["s3:GetObject"],
 	          "Effect":"Allow",
 	          "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", {"Ref" : "PrivateBucket"} , "/*"]]},
-	          "Principal":{ "AWS": "*" }
+	          "Principal":{ "AWS": {"Fn::GetAtt": ["CfnUser", "Arn"]} }
             }
 		  ]
         },
