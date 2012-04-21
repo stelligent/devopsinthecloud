@@ -1,0 +1,21 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "CloudFormation Template to provision a target environment for the rails sample app",
+  
+  "Parameters" : {
+      
+  },
+  
+  "Mappings" : {
+  },
+    
+  "Resources" : {     
+      
+  },
+  
+  "Outputs" : {
+
+  }
+
+}
