@@ -22,10 +22,10 @@
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
 
-	"BuildArtifactBucket" : {
+	"PrivateBucket" : {
       "Description" : "S3 bucket for storing build artifacts",
       "Type" : "String",
-      "Default" : "stelligentlabs",
+      "Default" : "stelligentlabs-private",
       "ConstraintDescription" : "must be a valid EC2 instance type."
     }
   },
@@ -74,6 +74,25 @@
 			]}			
           }
 		]
+      }
+    },
+
+    "BucketPolicy" : {
+      "Type" : "AWS::S3::BucketPolicy",
+      "Properties" : {
+        "PolicyDocument": {
+          "Id":"MyPolicy",
+          "Statement":[
+ 		    {
+              "Sid":"ReadAccess",
+	          "Action":["s3:GetObject"],
+	          "Effect":"Allow",
+	          "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", {"Ref" : "PrivateBucket"} , "/*"]]},
+	          "Principal":{ "AWS": "*" }
+            }
+		  ]
+        },
+        "Bucket" : {"Ref" : "PrivateBucket"}
       }
     },
 
