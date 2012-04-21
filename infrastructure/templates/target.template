@@ -56,7 +56,7 @@
       "Properties" : {
         "Path": "/",
 		"LoginProfile" : {
-			"Password" : "[aux1298]"
+			"Password" : "[aux$298]"
 		},
         "Policies": [{
           "PolicyName": "root",
@@ -247,6 +247,10 @@
     },
 	"StackName" : {
       "Value" : { "Ref" : "AWS::StackName" }
+    },
+	"SampleApp" : {
+      "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "/"]] },
+      "Description" : "URL for newly created Sample App"
     }
   }
 }
