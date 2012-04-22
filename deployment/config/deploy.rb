@@ -17,6 +17,12 @@ after "deploy:bundle_install", "deploy:db_migrate"
 after "deploy:db_migrate", "deploy:restart"
 
 namespace :deploy do
+  task :setup do
+    run "sudo rm -rf #{deploy_to}"
+    run "sudo mkdir #{deploy_to}"
+    run "sudo chown -R #{user}:#{user} #{deploy_to}"
+  end
+  
   task :deploy do
     run "cd #{deploy_to} && sudo wget https://s3.amazonaws.com/stelligentlabs/devopsinthecloud.tar.gz"
     run "cd #{deploy_to} && sudo tar -zxf devopsinthecloud.tar.gz"

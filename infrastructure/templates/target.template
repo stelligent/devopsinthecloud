@@ -194,10 +194,6 @@
 		  "echo \"Defaults:%ec2-user !requiretty\" >> /etc/sudoers\n",
 		  "echo \"Defaults:ec2-user !requiretty\" >> /etc/sudoers\n",
 		
-		  "# Add deployment directory and give it correct ownership\n",
-		  "mkdir /var/www/rails\n",
-		  "chown -R /var/www/rails\n",
-		 
 		  "# Build environment using Puppet\n",
           "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
 		
