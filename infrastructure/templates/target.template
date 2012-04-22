@@ -182,6 +182,9 @@
           "    --access-key ",  { "Ref" : "HostKeys" },
           "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
           "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+		  "# Build environment using Puppet\n",
+          "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
 		
 		  "# Add in virtual hosts config\n",
 		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
@@ -193,9 +196,6 @@
 		  "# Disable tty for ec2-user\n",
 		  "echo \"Defaults:%ec2-user !requiretty\" >> /etc/sudoers\n",
 		  "echo \"Defaults:ec2-user !requiretty\" >> /etc/sudoers\n",
-		
-		  "# Build environment using Puppet\n",
-          "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
 		
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
 
