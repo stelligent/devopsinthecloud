@@ -1,0 +1,23 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "CloudFormation Template to provision a Jenkins instance",
+  
+  "Parameters" : {
+      
+  
+  },
+  
+  "Mappings" : {
+  
+  },
+    
+  "Resources" : {     
+        
+  },
+  
+  "Outputs" : {
+   
+  }
+
+}

@@ -62,6 +62,12 @@
       "Type" : "AWS::IAM::User",
       "Properties" : {
         "Path": "/",
+<<<<<<< HEAD
+=======
+		"LoginProfile" : {
+			"Password" : "[aux$298]"
+		},
+>>>>>>> afd64d6b2984ce016f07f211c2c253fddbe666de
         "Policies": [{
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
@@ -251,6 +257,10 @@
     },
 	"StackName" : {
       "Value" : { "Ref" : "AWS::StackName" }
+    },
+	"SampleApp" : {
+      "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "/"]] },
+      "Description" : "URL for newly created Sample App"
     }
   }
 }

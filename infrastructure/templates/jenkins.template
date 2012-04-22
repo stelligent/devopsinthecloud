@@ -157,7 +157,7 @@
 		      },
 		
 		      "/usr/share/tomcat6/sqs_receive_message.rb" : { 
-			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/sqs_receive_message.rb"]]},
+			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/sqs_receive_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -165,7 +165,7 @@
 		      },
 		
 			  "/usr/share/tomcat6/sqs_send_message.rb" : { 
-				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/sqs_send_message.rb"]]},
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/sqs_send_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -173,7 +173,7 @@
 		      },
 		
 			  "/usr/share/tomcat6/terminate.rb" : { 
-		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/terminate.rb"]]},
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/terminate.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -197,7 +197,7 @@
 	          },
 	
 			  "/etc/cron.hourly/jenkins_versioning.sh" : {
-				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/jenkins_versioning.sh"]]},
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/jenkins_versioning.sh"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
