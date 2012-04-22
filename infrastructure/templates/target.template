@@ -62,12 +62,6 @@
       "Type" : "AWS::IAM::User",
       "Properties" : {
         "Path": "/",
-<<<<<<< HEAD
-=======
-		"LoginProfile" : {
-			"Password" : "[aux$298]"
-		},
->>>>>>> afd64d6b2984ce016f07f211c2c253fddbe666de
         "Policies": [{
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
