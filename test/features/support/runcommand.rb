@@ -5,9 +5,15 @@ class RunCommand
     attr_accessor :base_directory
 
     def initialize(args = {})
-        @host = args[:host] || 'localhost'
-        ssh_opts = {}
-        @ssh = Net::SSH.start(args[:host], args[:user], ssh_opts) if args[:host]
+      @host = args[:host] || 'localhost'
+      ssh_opts = {}
+      @ssh = Net::SSH.start(args[:host], args[:user],:paranoid => false, ssh_opts) do |ssh|
+      begin
+        rescue Net::SSH::HostKeyMismatch => e
+          puts "remembering new key: #{e.fingerprint}"
+          e.remember_host!
+        retry
+      end
     end
 
     def run(cmd)

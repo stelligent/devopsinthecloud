@@ -6,7 +6,7 @@ Feature: Scripted provisioning of target environment
     Background:
         Given I am sshed into the environment
 
-    Scenario: Is the proper version of Passenger installed?
+    Scenario: Is Passenger installed?
         When I run "gem list"
         Then I should see "passenger"
     
