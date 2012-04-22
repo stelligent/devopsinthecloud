@@ -16,23 +16,26 @@
     },
 
     "InstanceType" : {
-      "Description" : "Jenkins EC2 instance type",
+      "Description" : "EC2 instance type",
       "Type" : "String",
       "Default" : "c1.medium",
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
 
 	"ApplicationName" : {
+	  "Description" : "CNAME for the application",
 	  "Type" : "String",
 	  "Default" : "target"
 	},
 	
 	"HostedZone" : {
+	  "Description" : "Domain to use",
 	  "Type" : "String",
 	  "Default" : "devopscloud.com"
 	},
 	
 	"EnvironmentType" : {
+	  "Description" : "Mode for rails to run in",
 	  "Type" : "String",
 	  "Default" : "development"
 	},
