@@ -8,7 +8,7 @@ class RunCommand
       @host = args[:host] || 'localhost'
       ssh_opts = {}
       begin
-        @ssh = Net::SSH.start(args[:host], args[:user], :paranoid => false, ssh_opts) do |ssh|
+        @ssh = Net::SSH.start(args[:host], args[:user], ssh_opts) do |ssh|
         end
       rescue Net::SSH::HostKeyMismatch => e
         puts "remembering new key: #{e.fingerprint}"
