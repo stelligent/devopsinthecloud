@@ -1,0 +1,38 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "CloudFormation Template to create basic account resource policies",
+  
+  "Parameters" : {
+	"PublicBucket" : {
+	  "Description" : "Public S3 bucket for storing artifacts",
+      "Type" : "String",
+      "Default" : "stelligentlabs",
+      "ConstraintDescription" : "Must be a valid S3 Bucket"
+	}
+  },
+
+  "Resources" : {
+	"PublicBucketPolicy" : {
+	  "Type" : "AWS::S3::BucketPolicy",
+	  "Properties" : {
+	    "PolicyDocument": {
+	      "Id":"PublicBucketPolicy",
+	      "Statement":[
+		    {
+	          "Sid":"ReadAccess",
+	          "Action":["s3:GetObject"],
+	          "Effect":"Allow",
+	          "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "PublicBucket" } , "/*"]]},
+	          "Principal":{ "AWS": "*" }
+	        }
+		  ]
+	    },
+	    "Bucket" : {"Ref" : "PublicBucket"}
+	  }
+	}
+  },
+
+  "Outputs" : {
+  }
+}
