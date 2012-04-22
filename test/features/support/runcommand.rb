@@ -7,13 +7,13 @@ class RunCommand
     def initialize(args = {})
       @host = args[:host] || 'localhost'
       ssh_opts = {}
-      @ssh = Net::SSH.start(args[:host], args[:user],:paranoid => false, ssh_opts) do |ssh|
       begin
-        rescue Net::SSH::HostKeyMismatch => e
-          puts "remembering new key: #{e.fingerprint}"
-          e.remember_host!
-        retry
-      end
+        @ssh = Net::SSH.start(args[:host], args[:user], :paranoid => false, ssh_opts) do |ssh|
+        end
+      rescue Net::SSH::HostKeyMismatch => e
+        puts "remembering new key: #{e.fingerprint}"
+        e.remember_host!
+      retry
     end
 
     def run(cmd)
