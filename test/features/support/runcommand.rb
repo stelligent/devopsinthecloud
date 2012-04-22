@@ -13,7 +13,8 @@ class RunCommand
       rescue Net::SSH::HostKeyMismatch => e
         puts "remembering new key: #{e.fingerprint}"
         e.remember_host!
-      retry
+        retry
+      end
     end
 
     def run(cmd)
