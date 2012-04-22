@@ -12,18 +12,11 @@ class RunCommand
 
     def run(cmd)
         run_cmd = (@base_directory ? "cd #{@base_directory} && " : "") + cmd + " 2>&1"
-        @last_cmd_output = (@ssh ? run_remote(run_cmd) : run_local(run_cmd))
+        @last_cmd_output = run_remote(run_cmd)
     end
  
     ##################################################################################
     private 
-
-    def run_local(cmd)
-        stdout_data = `#{cmd}`
-        exit_code = $? >> 8
-        raise "FAILED host: #{@host}\nreturn code: #{exit_code}\ndir: #{@base_directory}\ncmd: #{cmd}\noutput: #{stdout_data}" unless exit_code == 0
-        return stdout_data
-    end
 
     # Stolen from http://stackoverflow.com/a/3386375
     def run_remote(cmd)
