@@ -11,7 +11,7 @@ role :db,  domain, :primary => true
 
 set :deploy_via, :remote_cache
 
-
+after "deploy:setup", "deploy:deploy"
 after "deploy:deploy", "deploy:bundle_install"
 after "deploy:bundle_install", "deploy:db_migrate"
 after "deploy:db_migrate", "deploy:restart"
