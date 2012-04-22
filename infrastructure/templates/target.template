@@ -35,6 +35,13 @@
 	"EnvironmentType" : {
 	  "Type" : "String",
 	  "Default" : "development"
+	},
+	
+	"PublicBucket" : {
+	  "Description" : "S3 bucket for storing build artifacts",
+      "Type" : "String",
+      "Default" : "stelligentlabs",
+      "ConstraintDescription" : "Must be a valid S3 Bucket"
 	}
   },
   
@@ -55,9 +62,6 @@
       "Type" : "AWS::IAM::User",
       "Properties" : {
         "Path": "/",
-		"LoginProfile" : {
-			"Password" : "[aux1298]"
-		},
         "Policies": [{
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
