@@ -30,7 +30,7 @@ namespace :deploy do
   end
   
   task :bundle_install do
-    run "cd #{deploy_to} && RAILS_ENV=production bundle install"
+    run "cd #{deploy_to} && bundle install"
   end
   
   task :db_migrate do
