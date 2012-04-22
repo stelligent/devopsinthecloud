@@ -139,7 +139,7 @@
 	              "<VirtualHost *:80>\n",
 	              "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
 	              "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
-				  "RailsEnv ", {"Ref" : "HostedZone"}, "\n",
+				  "RailsEnv ", {"Ref" : "EnvironmentType"}, "\n",
 				  "DocumentRoot /var/www/rails/public\n",
 				  "<Directory /var/www/rails/public>\n",
 				     "AllowOverride all\n",
