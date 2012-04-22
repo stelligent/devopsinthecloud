@@ -112,7 +112,7 @@
 
 			"files" : {
 			  "/home/ec2-user/id_rsa.pub" : {
-			   "source" : "https://s3.amazonaws.com/stelligentlabs-private/id_rsa.pub",
+			   "source" : "https://s3.amazonaws.com/stelligentlabs/keypairs/id_rsa.pub",
                "mode"   : "000500",
                "owner"  : "root",
                "group"  : "root"
