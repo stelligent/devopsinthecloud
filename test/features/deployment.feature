@@ -7,7 +7,7 @@ Feature: Scripted provisioning of target environment
         Given I am sshed into the environment
 
     Scenario: Is the rails application deployed into the correct directory?
-        When I run "ls -las /usr/share/rails/"
+        When I run "ls -las /var/www/rails/"
         Then I should see "Gemfile"
     
     Scenario Outline: Have all the required gems been installed?
