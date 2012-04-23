@@ -169,6 +169,13 @@
 	            "group"  : "tomcat"
 	          },
 			  "/usr/share/tomcat6/.ssh/id_rsa" : {
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/usr/share/tomcat6/.ssh/known_hosts"]]},
+	            "mode"   : "000644",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat",
+				"authentication" : "S3AccessCreds"
+	          },
+			  "/usr/share/tomcat6/.ssh/id_rsa" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/id_rsa"]]},
 	            "mode"   : "000600",
 	            "owner"  : "tomcat",
