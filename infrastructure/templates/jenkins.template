@@ -137,7 +137,7 @@
 		      },
 		
 		      "/usr/share/tomcat6/sqs_receive_message.rb" : { 
-			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/sqs_receive_message.rb"]]},
+			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/sqs_receive_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -145,7 +145,7 @@
 		      },
 		
 			  "/usr/share/tomcat6/sqs_send_message.rb" : { 
-				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/sqs_send_message.rb"]]},
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/sqs_send_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -153,14 +153,14 @@
 		      },
 		
 			  "/usr/share/tomcat6/terminate.rb" : { 
-		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/terminate.rb"]]},
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/terminate.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 		      },
 		  	  "/usr/share/tomcat6/create_config_domain.rb" : { 
-		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/create_config_domain.rb"]]},
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/create_config_domain.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -181,7 +181,7 @@
 				"authentication" : "S3AccessCreds"
 	          },
 			  "/etc/cron.hourly/jenkins_versioning.sh" : {
-				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/jenkins_versioning.sh"]]},
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/jenkins/jenkins_versioning.sh"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -236,7 +236,7 @@
 		  "git clone git@github.com:stelligent/devopsinthecloudjenkins.git /usr/share/tomcat6/.jenkins\n",
 		
 		  "# Installing Ruby 1.9.3 from RPM\n",
-		  "wget https://s3.amazonaws.com/stelligentlabs/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		  "wget https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
 		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
 		
 		  "# Install Jenkins Plugins\n",
@@ -265,7 +265,7 @@
 		  "echo \"AWS_CLOUDFORMATION_HOME=/opt/aws/apitools/cfn/\" >> /etc/sysconfig/tomcat6\n",
 		
 		  "# Add CloudFormation CLI tools\n",
-		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/stelligentlabs/CloudFormation-CLI.tar.gz\n",
+		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/CloudFormation-CLI.tar.gz\n",
 		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
 		
 		  "# Setup deployment directory\n",
