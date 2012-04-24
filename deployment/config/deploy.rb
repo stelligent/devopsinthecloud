@@ -1,16 +1,12 @@
 require 'rubygems'
 require 'aws-sdk'
+load '/usr/share/tomcat6/aws.config'
 
-access_key=ARGV[0]
-secret_access_key=ARGV[1]
-
-sdb = AWS::SimpleDB.new(
-  :access_key_id => "#{access_key}",
-  :secret_access_key => "#{secret_access_key}")
+sdb = AWS::SimpleDB.new
 
 set :domain do
-  item = sdb.domains["test"].items['parameters']
-  item.attributes['domain'].values[0].to_s
+  item = sdb.domains["test"].items["parameters"]
+  item.attributes["domain"].values[0].to_s
 end
 
 set :artifact_bucket do

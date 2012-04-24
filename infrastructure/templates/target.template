@@ -135,8 +135,9 @@
                 "owner"  : "root",
                 "group"  : "root"
               },
+			  
 
-			"/etc/httpd/conf/virtualhosts" : {
+			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
 	              "NameVirtualHost *:80\n",
 	              "<VirtualHost *:80>\n",
@@ -250,6 +251,13 @@
     },
 	"StackName" : {
       "Value" : { "Ref" : "AWS::StackName" }
+    },
+    "ArtifactBucket" : {
+      "Value" : { "Ref" : "PublicBucket" }
+    },
+    "Domain" : {
+      "Value" : { "Fn::Join" : ["", [{ "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }]] },
+      "Description" : "Full domain"
     },
 	"SampleApp" : {
       "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "/"]] },

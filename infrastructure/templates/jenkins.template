@@ -159,6 +159,13 @@
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 		      },
+		  	  "/usr/share/tomcat6/simpledb.rb" : { 
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/simpledb.rb"]]},
+		        "mode"   : "000500", 
+		        "owner"  : "tomcat",
+		        "group"  : "tomcat",
+				"authentication" : "S3AccessCreds"
+		      },
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/pub/known_hosts"]]},
 	            "mode"   : "000644",
@@ -173,13 +180,22 @@
 	            "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 	          },
-	
 			  "/etc/cron.hourly/jenkins_versioning.sh" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/jenkins_versioning.sh"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
+			  },
+			  "/usr/share/tomcat6/aws.config" : {
+				"content" : { "Fn::Join" : ["", [
+				  "AWS.config(\n",
+					":access_key_id => \"", { "Ref" : "HostKeys" }, "\",\n",
+					":secret_access_key => \"", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\")\n",
+                  ]]},
+				"mode"   : "000500",
+                "owner"  : "tomcat",
+                "group"  : "tomcat"
 			  }
 		    }
           }

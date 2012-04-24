@@ -1,14 +1,10 @@
 require 'rubygems'
 require 'aws-sdk'
-
+load '/usr/share/tomcat6/aws.config'
 
 instance=ARGV[0]
-access_key=ARGV[1]
-secret_access_key=ARGV[2]
 
-ec2 = AWS::EC2.new(
-  :access_key_id => "#{access_key}",
-  :secret_access_key => "#{secret_access_key}")
+ec2 = AWS::EC2.new
 
 instances = ec2.instances.ip_address("#{instance}")
 puts instances.status

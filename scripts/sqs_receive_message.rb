@@ -1,14 +1,10 @@
 require 'rubygems'
 require 'aws-sdk'
-
+load '/usr/share/tomcat6/aws.config'
 
 que_name=ARGV[0]
-access_key=ARGV[1]
-secret_access_key=ARGV[2]
 
-sqs = AWS::SQS.new(
-  :access_key_id => "#{access_key}",
-  :secret_access_key => "#{secret_access_key}")
+sqs = AWS::SQS.new
 
 queue = sqs.queues.named("#{que_name}")
 
