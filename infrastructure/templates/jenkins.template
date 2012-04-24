@@ -166,7 +166,7 @@
 				"authentication" : "S3AccessCreds"
 		      },
 		
-			  "/usr/share/tomcat6/scripts/aws/erminate.rb" : { 
+			  "/usr/share/tomcat6/scripts/aws/terminate.rb" : { 
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/terminate.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
