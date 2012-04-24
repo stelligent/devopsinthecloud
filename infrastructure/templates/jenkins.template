@@ -80,6 +80,20 @@
 		]
       }
     },
+    
+    "DeploymentQueue" : {
+	  "Type" : "AWS::SQS::Queue",
+	  "Properties" : {
+		"VisibilityTimeout" : "0"
+	  }
+	},
+	
+	"CFNStackQueue" : {
+	  "Type" : "AWS::SQS::Queue",
+	  "Properties" : {
+		"VisibilityTimeout" : "0"
+	  }
+	},
 
     "PrivateBucketPolicy" : {
       "Type" : "AWS::S3::BucketPolicy",
@@ -136,7 +150,7 @@
 		        "group"  : "tomcat" 
 		      },
 		
-		      "/usr/share/tomcat6/sqs_receive_message.rb" : { 
+		      "/usr/share/tomcat6/scripts/aws/sqs_receive_message.rb" : { 
 			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/sqs_receive_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
@@ -144,7 +158,7 @@
 				"authentication" : "S3AccessCreds"
 		      },
 		
-			  "/usr/share/tomcat6/sqs_send_message.rb" : { 
+			  "/usr/share/tomcat6/scripts/aws/sqs_send_message.rb" : { 
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/sqs_send_message.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
@@ -152,14 +166,14 @@
 				"authentication" : "S3AccessCreds"
 		      },
 		
-			  "/usr/share/tomcat6/terminate.rb" : { 
+			  "/usr/share/tomcat6/scripts/aws/erminate.rb" : { 
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/terminate.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 		      },
-		  	  "/usr/share/tomcat6/create_config_domain.rb" : { 
+		  	  "/usr/share/tomcat6/scripts/aws/create_config_domain.rb" : { 
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/create_config_domain.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
@@ -187,7 +201,7 @@
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 			  },
-			  "/usr/share/tomcat6/aws.config" : {
+			  "//usr/share/tomcat6/scripts/config/aws.config" : {
 				"content" : { "Fn::Join" : ["", [
 				  "AWS.config(\n",
 					":access_key_id => \"", { "Ref" : "HostKeys" }, "\",\n",
@@ -328,6 +342,14 @@
 	"JenkinsURL" : {
       "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "IPAddress" }, ":8080/jenkins"]] },
       "Description" : "URL for newly created Jenkins app"
-    }
+    },
+	"DeploymentQueueName" : {
+	  "Description" : "Name newly created Deployment SQS Queue",
+	  "Value" : { "Fn::GetAtt" : ["DeploymentQueue", "QueueName"]}
+	},
+	"CFNStackQueueName" : {
+	  "Description" : "Name newly created CFN Stack SQS Queue",
+	  "Value" : { "Fn::GetAtt" : ["CFNStackQueue", "QueueName"]}
+	}
   }
 }
