@@ -1,6 +1,6 @@
-require File.expand_path('../config/aws.config', __FILE__)
 require 'rubygems'
 require 'aws-sdk'
+load File.expand_path('../../config/aws.config', __FILE__)
 
 que_name=ARGV[0]
 

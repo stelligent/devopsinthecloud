@@ -201,7 +201,7 @@
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 			  },
-			  "//usr/share/tomcat6/scripts/config/aws.config" : {
+			  "/usr/share/tomcat6/scripts/config/aws.config" : {
 				"content" : { "Fn::Join" : ["", [
 				  "AWS.config(\n",
 					":access_key_id => \"", { "Ref" : "HostKeys" }, "\",\n",

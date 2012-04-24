@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'aws-sdk'
-load '/usr/share/tomcat6/aws.config'
+load '/usr/share/tomcat6/scripts/config/aws.config'
 
 sdb = AWS::SimpleDB.new
 
