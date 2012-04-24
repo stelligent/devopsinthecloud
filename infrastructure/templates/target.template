@@ -110,12 +110,12 @@
             },
 
 			"sources" : {
-				"/home/ec2-user/" : "https://s3.amazonaws.com/stelligentlabs/puppet.tar.gz\n"
+				"/home/ec2-user/" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/puppet.tar.gz"]]}
 			},
 
 			"files" : {
 			  "/home/ec2-user/id_rsa.pub" : {
-			   "source" : "https://s3.amazonaws.com/stelligentlabs/keypairs/id_rsa.pub",
+			   "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/keypairs/id_rsa.pub"]]},
                "mode"   : "000500",
                "owner"  : "root",
                "group"  : "root"
