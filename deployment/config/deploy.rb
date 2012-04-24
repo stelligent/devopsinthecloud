@@ -1,6 +1,10 @@
 require 'rubygems'
 require 'aws-sdk'
 
+sdb = AWS::SimpleDB.new(
+  :access_key_id => "AKIAIA6J23Q7RZ4GKXKA",
+  :secret_access_key => "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")
+
 set :domain,            "target.devopscloud.com"
 set :user,             "ec2-user"
 set :application,      "rails"
