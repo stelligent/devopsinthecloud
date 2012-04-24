@@ -5,7 +5,7 @@ sdb = AWS::SimpleDB.new(
   :access_key_id => "AKIAIA6J23Q7RZ4GKXKA",
   :secret_access_key => "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")
   
-set(:domain) do
+set :domain do
   item = sdb.domains["test"].items['parameters']
   puts item.attributes['params'].values[0]
 end
