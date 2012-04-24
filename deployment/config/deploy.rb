@@ -5,7 +5,12 @@ sdb = AWS::SimpleDB.new(
   :access_key_id => "AKIAIA6J23Q7RZ4GKXKA",
   :secret_access_key => "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")
 
-set :domain,            "target.devopscloud.com"
+def set_domain
+  item = sdb.domains["test"].items['parameters']
+  @domain = item.attributes['params'].values[0]
+end
+
+set :domain,            @domain
 set :user,             "ec2-user"
 set :application,      "rails"
 set :use_sudo,         false
