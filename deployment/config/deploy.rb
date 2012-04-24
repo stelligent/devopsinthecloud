@@ -10,7 +10,7 @@ def set_domain
   @domain = item.attributes['params'].values[0]
 end
 
-set :domain,            @domain
+set :domain,            "target.devopscloud.com"
 set :user,             "ec2-user"
 set :application,      "rails"
 set :use_sudo,         false
