@@ -159,8 +159,8 @@
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 		      },
-		  	  "/usr/share/tomcat6/simpledb.rb" : { 
-		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/simpledb.rb"]]},
+		  	  "/usr/share/tomcat6/create_config_domain.rb" : { 
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/create_config_domain.rb"]]},
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat",
@@ -191,7 +191,7 @@
 				"content" : { "Fn::Join" : ["", [
 				  "AWS.config(\n",
 					":access_key_id => \"", { "Ref" : "HostKeys" }, "\",\n",
-					":secret_access_key => \"", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\")\n",
+					":secret_access_key => \"", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\")\n"
                   ]]},
 				"mode"   : "000500",
                 "owner"  : "tomcat",

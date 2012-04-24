@@ -1,6 +1,6 @@
+require File.expand_path('../config/aws.config', __FILE__)
 require 'rubygems'
 require 'aws-sdk'
-load '/usr/share/tomcat6/aws.config'
 
 que_name=ARGV[0]
 ip_address=ARGV[1]
