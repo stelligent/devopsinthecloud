@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'aws-sdk'
+
 set :domain,            "target.devopscloud.com"
 set :user,             "ec2-user"
 set :application,      "rails"
