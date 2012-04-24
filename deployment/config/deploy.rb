@@ -1,20 +1,27 @@
 require 'rubygems'
 require 'aws-sdk'
 
+access_key=ARGV[0]
+secret_access_key=ARGV[1]
+
 sdb = AWS::SimpleDB.new(
-  :access_key_id => "AKIAIA6J23Q7RZ4GKXKA",
-  :secret_access_key => "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")
+  :access_key_id => "#{access_key}",
+  :secret_access_key => "#{secret_access_key}")
 
 set :domain do
   item = sdb.domains["test"].items['parameters']
-  @domain = item.attributes['params'].values[0].to_s
+  item.attributes['domain'].values[0].to_s
+end
+
+set :artifact_bucket do
+  item = sdb.domains["test"].items['parameters']
+  item.attributes['artifact_bucket'].values[0].to_s
 end
 
 set :user,             "ec2-user"
 set :application,      "rails"
 set :use_sudo,         false
 set :deploy_to,        "/var/www/#{application}"
-set :artifact_bucket,  "stelligentlabs"
 set :artifact,         "devopsinthecloud.tar.gz"
 set :artifact_url,     "https://s3.amazonaws.com/#{artifact_bucket}/#{artifact}"
 set :ssh_options,      {:forward_agent => true}
