@@ -279,7 +279,7 @@
 		  "echo \"AWS_CLOUDFORMATION_HOME=/opt/aws/apitools/cfn/\" >> /etc/sysconfig/tomcat6\n",
 		
 		  "# Add CloudFormation CLI tools\n",
-		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/CloudFormation-CLI.tar.gz\n",
+		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/resources/aws_cli/CloudFormation-CLI.tar.gz\n",
 		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
 		
 		  "# Setup deployment directory\n",
