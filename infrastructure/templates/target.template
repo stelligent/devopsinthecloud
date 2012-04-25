@@ -145,25 +145,10 @@
 			   "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/id_rsa.pub"]]},
                "mode"   : "000500",
                "owner"  : "root",
-               "group"  : "root"
+               "group"  : "root",
+			   "authentication" : "S3AccessCreds"
               },
 			  "/home/ec2-user/nodes.pp" : {
-                "content" : { "Fn::Join" : ["", [
-				  "node default {\n",
-					"include system\n",
-				    "include bundler\n",
-				    "include passenger\n",
-				    "include sqlite\n",
-				    "include git\n",
-					"include httpd\n",
-				  "}"
-                  ]]},
-                "mode"   : "000500",
-                "owner"  : "root",
-                "group"  : "root"
-              },
-			  
-
 			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
 	              "NameVirtualHost *:80\n",
@@ -182,7 +167,7 @@
 	                "owner"  : "root",
 	                "group"  : "root"
 	          },
-			"/etc/httpd/conf/passenger" : {
+			  "/etc/httpd/conf/passenger" : {
 	            "content" : { "Fn::Join" : ["", [
 	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12/ext/apache2/mod_passenger.so\n",
 	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12\n",
@@ -194,7 +179,15 @@
 	          }
 			}
           }
-        }
+        },
+		"AWS::CloudFormation::Authentication" : {
+		  "S3AccessCreds" : {
+		    "type" : "S3",
+		    "accessKeyId" : { "Ref" : "HostKeys" },
+		    "secretKey" : {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+		    "buckets" : [ { "Ref" : "PrivateBucket" }, { "Ref" : "PublicBucket"} ]
+		  }
+		}
       },
       "Properties": {
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
