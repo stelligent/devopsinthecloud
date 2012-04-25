@@ -149,6 +149,22 @@
 			   "authentication" : "S3AccessCreds"
               },
 			  "/home/ec2-user/nodes.pp" : {
+                "content" : { "Fn::Join" : ["", [
+				  "node default {\n",
+					"include system\n",
+				    "include bundler\n",
+				    "include passenger\n",
+				    "include sqlite\n",
+				    "include git\n",
+					"include httpd\n",
+				  "}"
+                  ]]},
+                "mode"   : "000500",
+                "owner"  : "root",
+                "group"  : "root"
+              },
+			  
+
 			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
 	              "NameVirtualHost *:80\n",
@@ -180,6 +196,7 @@
 			}
           }
         },
+		
 		"AWS::CloudFormation::Authentication" : {
 		  "S3AccessCreds" : {
 		    "type" : "S3",
