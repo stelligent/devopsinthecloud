@@ -77,6 +77,25 @@
       }
     },
 
+	"PrivateBucketPolicy" : {
+      "Type" : "AWS::S3::BucketPolicy",
+      "Properties" : {
+        "PolicyDocument": {
+          "Id":"PrivateBucketPolicy",
+          "Statement":[
+ 		    {
+              "Sid":"ReadAccess",
+	          "Action":["s3:GetObject"],
+	          "Effect":"Allow",
+	          "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "PrivateBucket" } , "/*" ]]},
+	          "Principal":{ "AWS": { "Fn::GetAtt" : [ "CfnUser", "Arn" ]} }
+            }
+		  ]
+        },
+        "Bucket" : {"Ref" : "PrivateBucket"}
+      }
+    },
+
     "HostKeys" : {
       "Type" : "AWS::IAM::AccessKey",
       "Properties" : {
@@ -115,7 +134,7 @@
 
 			"files" : {
 			  "/home/ec2-user/id_rsa.pub" : {
-			   "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/keypairs/id_rsa.pub"]]},
+			   "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/id_rsa.pub"]]},
                "mode"   : "000500",
                "owner"  : "root",
                "group"  : "root"

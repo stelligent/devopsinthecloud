@@ -181,7 +181,7 @@
 				"authentication" : "S3AccessCreds"
 		      },
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
-				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/pub/known_hosts"]]},
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/known_hosts"]]},
 	            "mode"   : "000644",
 	            "owner"  : "tomcat",
 	            "group"  : "tomcat",
