@@ -126,6 +126,7 @@
 
     "WebServer": {  
       "Type": "AWS::EC2::Instance",
+ 	  "DependsOn" : "PrivateBucketPolicy",
 	  "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "config" : {
