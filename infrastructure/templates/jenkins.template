@@ -180,6 +180,13 @@
 		        "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 		      },
+			  "/usr/share/tomcat6/scripts/aws/showback_domain.rb" : { 
+		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/scripts/aws/showback_domain.rb"]]},
+		        "mode"   : "000500", 
+		        "owner"  : "tomcat",
+		        "group"  : "tomcat",
+				"authentication" : "S3AccessCreds"
+		      },
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/known_hosts"]]},
 	            "mode"   : "000644",
@@ -220,7 +227,7 @@
 		    "type" : "S3",
 		    "accessKeyId" : { "Ref" : "HostKeys" },
 		    "secretKey" : {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
-		    "buckets" : [ { "Ref" : "PrivateBucket" }, { "Ref" : "PublicBucket"} ]
+		    "buckets" : [ { "Ref" : "PrivateBucket" }, { "Ref" : "PublicBucket" } ]
 		  }
 		}
       },
