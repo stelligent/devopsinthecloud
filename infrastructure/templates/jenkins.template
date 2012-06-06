@@ -280,6 +280,10 @@
 		  "echo \"Defaults:%tomcat !requiretty\" >> /etc/sudoers\n",
 		  "echo \"Defaults:tomcat !requiretty\" >> /etc/sudoers\n",
 		
+		"# Update main Jenkins config\n",
+		  "sed -i s@<accesskey>*</accessKey>@<accesskey>", { "Ref" : "HostKeys" }, "</accesskey>@ /usr/share/tomcat/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
+		  "sed -i s@<secretKey>*</secretKey>@<secretKey>", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "</secretKey>@ /usr/share/tomcat/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
+		
 		  "# Add AWS Credentials to Tomcat\n",
 		  "echo \"AWS_ACCESS_KEY=", { "Ref" : "HostKeys" }, "\" >> /etc/sysconfig/tomcat6\n",
 		  "echo \"AWS_SECRET_ACCESS_KEY=", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\" >> /etc/sysconfig/tomcat6\n",
