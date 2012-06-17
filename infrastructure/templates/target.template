@@ -31,7 +31,7 @@
 	"HostedZone" : {
 	  "Description" : "Domain to use",
 	  "Type" : "String",
-	  "Default" : "devopscloud.com"
+	  "Default" : "oneclickdeployment.com"
 	},
 	
 	"EnvironmentType" : {
@@ -43,14 +43,14 @@
 	"PrivateBucket" : {
       "Description" : "S3 bucket for storing credentials",
       "Type" : "String",
-      "Default" : "stelligentlabs-private",
+      "Default" : "sealabs-private",
       "ConstraintDescription" : "Must be a valid S3 Bucket"
     },
 	
 	"PublicBucket" : {
 	  "Description" : "S3 bucket for storing build artifacts",
       "Type" : "String",
-      "Default" : "stelligentlabs",
+      "Default" : "sealabs",
       "ConstraintDescription" : "Must be a valid S3 Bucket"
 	}
   },
@@ -137,7 +137,7 @@
             },
 
 			"sources" : {
-				"/home/ec2-user/" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PublicBucket" }, "/puppet.tar.gz"]]}
+				"/home/ec2-user/" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/puppet.tar.gz"]]}
 			},
 
 			"files" : {
