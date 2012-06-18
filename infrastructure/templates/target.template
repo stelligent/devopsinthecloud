@@ -31,7 +31,7 @@
 	"HostedZone" : {
 	  "Description" : "Domain to use",
 	  "Type" : "String",
-	  "Default" : "oneclickdeployment.com"
+	  "Default" : "devopscloud.com"
 	},
 	
 	"EnvironmentType" : {
@@ -43,14 +43,14 @@
 	"PrivateBucket" : {
       "Description" : "S3 bucket for storing credentials",
       "Type" : "String",
-      "Default" : "sealabs-private",
+      "Default" : "stelligentlabs-private",
       "ConstraintDescription" : "Must be a valid S3 Bucket"
     },
 	
 	"PublicBucket" : {
 	  "Description" : "S3 bucket for storing build artifacts",
       "Type" : "String",
-      "Default" : "sealabs",
+      "Default" : "stelligentlabs",
       "ConstraintDescription" : "Must be a valid S3 Bucket"
 	}
   },
@@ -185,8 +185,8 @@
 	          },
 			  "/etc/httpd/conf/passenger" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12/ext/apache2/mod_passenger.so\n",
-	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12\n",
+	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.13/ext/apache2/mod_passenger.so\n",
+	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.13\n",
 	              "PassengerRuby /usr/bin/ruby\n"
 	            ]]},
 	                "mode"   : "000500",
