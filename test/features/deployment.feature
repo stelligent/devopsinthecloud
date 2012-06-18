@@ -23,8 +23,4 @@ Feature: Scripted provisioning of target environment
         When I run "/sbin/chkconfig --list httpd"
         Then I should see "3:on"
         
-    Scenario: The application is up and running
-        When I run "/usr/bin/wget -qO- http://target.devopscloud.com"
-        Then I should see "Sample App"
-        
     
