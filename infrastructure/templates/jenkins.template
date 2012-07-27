@@ -144,7 +144,7 @@
 
 			"files" : {
 	          "/usr/share/tomcat6/webapps/jenkins.war" : { 
-		        "source" : "http://mirrors.jenkins-ci.org/warlatest/jenkins.war",
+		        "source" : "http://mirrors.jenkins-ci.org/war/jenkins.war",
 		        "mode"   : "000500", 
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat" 
