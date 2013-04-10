@@ -269,6 +269,7 @@
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/dashboard-view/2.2/dashboard-view.hpi\n",
 
 		  "# Install Bundler\n",
+	      "gem install rake -v 0.9.2.2\n",
 		  "gem install bundler\n",
 		  "gem install aws-sdk\n",
 		  "gem install cucumber --version 1\n",
