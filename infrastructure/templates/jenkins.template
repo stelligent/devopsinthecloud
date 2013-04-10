@@ -1,10 +1,10 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
-  
+
   "Description" : "CloudFormation Template to provision a Jenkins instance",
-  
+
   "Parameters" : {
-      
+
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type" : "String",
@@ -36,7 +36,7 @@
       "ConstraintDescription" : "Must be a valid S3 Bucket"
 	}
   },
-  
+
   "Mappings" : {
     "AWSInstanceType2Arch" : {
       "t1.micro"    : { "Arch" : "64" },
@@ -58,9 +58,9 @@
       "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-e8fa4ee9" }
     }
   },
-    
-  "Resources" : {     
-      
+
+  "Resources" : {
+
     "CfnUser" : {
       "Type" : "AWS::IAM::User",
       "Properties" : {
@@ -68,26 +68,26 @@
         "Policies": [
 		  {
             "PolicyName": "Admin",
-            "PolicyDocument": 
+            "PolicyDocument":
 			  { "Statement": [
 				{
             	  "Effect":"Allow",
                   "Action":"*",
                   "Resource":"*"
 				}
-			]}			
+			]}
           }
 		]
       }
     },
-    
+
     "DeploymentQueue" : {
 	  "Type" : "AWS::SQS::Queue",
 	  "Properties" : {
 		"VisibilityTimeout" : "0"
 	  }
 	},
-	
+
 	"CFNStackQueue" : {
 	  "Type" : "AWS::SQS::Queue",
 	  "Properties" : {
@@ -121,7 +121,7 @@
       }
     },
 
-    "WebServer": {  
+    "WebServer": {
       "Type": "AWS::EC2::Instance",
  	  "DependsOn" : "PrivateBucketPolicy",
       "Metadata" : {
@@ -140,51 +140,51 @@
 				"libyaml-devel"			: []
               }
             },
-			
+
 
 			"files" : {
-	          "/usr/share/tomcat6/webapps/jenkins.war" : { 
+	          "/usr/share/tomcat6/webapps/jenkins.war" : {
 		        "source" : "http://mirrors.jenkins-ci.org/war/1.472/jenkins.war",
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
-		        "group"  : "tomcat" 
+		        "group"  : "tomcat"
 		      },
-		
-		      "/usr/share/tomcat6/scripts/aws/sqs_receive_message.rb" : { 
+
+		      "/usr/share/tomcat6/scripts/aws/sqs_receive_message.rb" : {
 			  	"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/aws/sqs_receive_message.rb"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 		      },
-		
-			  "/usr/share/tomcat6/scripts/aws/sqs_send_message.rb" : { 
+
+			  "/usr/share/tomcat6/scripts/aws/sqs_send_message.rb" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/aws/sqs_send_message.rb"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 		      },
-		
-			  "/usr/share/tomcat6/scripts/aws/terminate.rb" : { 
+
+			  "/usr/share/tomcat6/scripts/aws/terminate.rb" : {
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/aws/terminate.rb"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 		      },
-		
-		  	  "/usr/share/tomcat6/scripts/aws/create_config_domain.rb" : { 
+
+		  	  "/usr/share/tomcat6/scripts/aws/create_config_domain.rb" : {
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/aws/create_config_domain.rb"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 		      },
-		
-			  "/usr/share/tomcat6/scripts/aws/showback_domain.rb" : { 
+
+			  "/usr/share/tomcat6/scripts/aws/showback_domain.rb" : {
 		        "source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/aws/showback_domain.rb"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 		      },
-		
+
 			  "/usr/share/tomcat6/.ssh/known_hosts" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/known_hosts"]]},
 	            "mode"   : "000644",
@@ -192,7 +192,7 @@
 	            "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 	          },
-	
+
 			  "/usr/share/tomcat6/.ssh/id_rsa" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/id_rsa"]]},
 	            "mode"   : "000600",
@@ -200,14 +200,14 @@
 	            "group"  : "tomcat",
 				"authentication" : "S3AccessCreds"
 	          },
-	
+
 			  "/etc/cron.hourly/jenkins_versioning.sh" : {
 				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/jenkins/jenkins_versioning.sh"]]},
-		        "mode"   : "000500", 
+		        "mode"   : "000500",
 		        "owner"  : "tomcat",
 		        "group"  : "tomcat"
 			  },
-			
+
 			  "/usr/share/tomcat6/scripts/config/aws.config" : {
 				"content" : { "Fn::Join" : ["", [
 				  "AWS.config(\n",
@@ -248,18 +248,18 @@
           "    --access-key ",  { "Ref" : "HostKeys" },
           "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
           "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
-		  
+
 		  "# Copy Github credentials to root ssh directory\n",
 		  "cp /usr/share/tomcat6/.ssh/* /root/.ssh/\n",
-		
+
 		  "# Update Jenkins with versioned configuration\n",
 		  "rm -rf /usr/share/tomcat6/.jenkins\n",
 		  "git clone git@github.com:stelligent/devopsinthecloudjenkins.git /usr/share/tomcat6/.jenkins\n",
-		
+
 		  "# Installing Ruby 1.9.3 from RPM\n",
 		  "wget https://s3.amazonaws.com/stelligentlabs/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
 		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
-		
+
 		  "# Install Jenkins Plugins\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/git/1.1.16/git.hpi\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/s3/0.2.0/s3.hpi\n",
@@ -267,57 +267,57 @@
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/build-pipeline-plugin/1.2.3/build-pipeline-plugin.hpi\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/github/1.2/github.hpi\n",
 		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/dashboard-view/2.2/dashboard-view.hpi\n",
-		
+
 		  "# Install Bundler\n",
 		  "gem install bundler\n",
 		  "gem install aws-sdk\n",
-		  "gem install cucumber\n",
+		  "gem install cucumber --version 1\n",
 		  "gem install net-ssh\n",
 		  "gem install capistrano\n",
-		
+
 		  "# Add Tomcat user to sudoers and disable tty\n",
 		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
 		  "echo \"Defaults:%tomcat !requiretty\" >> /etc/sudoers\n",
 		  "echo \"Defaults:tomcat !requiretty\" >> /etc/sudoers\n",
-		
+
 		  "# Update main Jenkins config\n",
 		  "sed -i 's@<accessKey>.*</accessKey>@<accessKey>", { "Ref" : "HostKeys" }, "</accessKey>@' /usr/share/tomcat6/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
 		  "sed -i 's@<secretKey>.*</secretKey>@<secretKey>", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "</secretKey>@' /usr/share/tomcat6/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
-		
+
 		  "# Update Build Jenkins Job config\n",
 		  "sed -i 's@<bucket>.*</bucket>@<bucket>", { "Ref" : "PublicBucket" }, "</bucket>@' /usr/share/tomcat6/.jenkins/jobs/Build/config.xml\n",
 		  "sed -i 's@<bucket>.*</bucket>@<bucket>", { "Ref" : "PublicBucket" }, "</bucket>@' /usr/share/tomcat6/.jenkins/jobs/Puppet/config.xml\n",
 		  "sed -i 's@<bucket>.*</bucket>@<bucket>", { "Ref" : "PublicBucket" }, "/templates</bucket>@' /usr/share/tomcat6/.jenkins/jobs/Templates/config.xml\n",
 		  "sed -i 's@<bucket>.*</bucket>@<bucket>", { "Ref" : "PublicBucket" }, "/scripts/aws</bucket>@' /usr/share/tomcat6/.jenkins/jobs/JenkinsConfig/config.xml\n",
-		
+
 		  "# Add AWS Credentials to Tomcat\n",
 		  "echo \"AWS_ACCESS_KEY=", { "Ref" : "HostKeys" }, "\" >> /etc/sysconfig/tomcat6\n",
 		  "echo \"AWS_SECRET_ACCESS_KEY=", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\" >> /etc/sysconfig/tomcat6\n",
 		  "echo \"AWS_CLOUDFORMATION_HOME=/opt/aws/apitools/cfn/\" >> /etc/sysconfig/tomcat6\n",
-		
+
 		  "# Add CloudFormation CLI tools\n",
 		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/stelligentlabs/resources/aws_cli/CloudFormation-CLI.tar.gz\n",
 		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
-		
+
 		  "# Setup deployment directory\n",
 		  "mkdir /var/www/rails\n",
 		  "sudo chown -R ec2-user:ec2-user /var/www/rails\n",
-		
+
 		  "# Tomcat Setup\n",
 		  "chown -R tomcat:tomcat /usr/share/tomcat6/\n",
 		  "service tomcat6 start\n",
-		
+
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
-		
+
 		  "date > /home/ec2-user/stoptime"
-        ]]}}        
+        ]]}}
       }
     },
 
     "IPAddress" : {
       "Type" : "AWS::EC2::EIP"
     },
-    
+
     "IPAssoc" : {
       "Type" : "AWS::EC2::EIPAssociation",
       "Properties" : {
@@ -325,7 +325,7 @@
         "EIP" : { "Ref" : "IPAddress" }
        }
     },
-    
+
     "FrontendGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
@@ -335,13 +335,13 @@
 	      {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
 		  {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"}
         ]
-      } 
+      }
     },
 
 	"WaitHandle" : {
       "Type" : "AWS::CloudFormation::WaitConditionHandle"
     },
-    
+
     "WaitCondition" : {
       "Type" : "AWS::CloudFormation::WaitCondition",
       "DependsOn" : "WebServer",
@@ -349,9 +349,9 @@
         "Handle" : { "Ref" : "WaitHandle" },
         "Timeout" : "1200"
       }
-    }          
+    }
   },
-  
+
   "Outputs" : {
     "InstanceIPAddress" : {
       "Value" : { "Ref" : "IPAddress" }
