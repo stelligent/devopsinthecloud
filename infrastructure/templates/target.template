@@ -1,10 +1,10 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
-  
+
   "Description" : "CloudFormation Template to provision a target environment for the rails sample app",
-  
+
   "Parameters" : {
-      
+
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type" : "String",
@@ -27,26 +27,26 @@
 	  "Type" : "String",
 	  "Default" : "target"
 	},
-	
+
 	"HostedZone" : {
 	  "Description" : "Domain to use",
 	  "Type" : "String",
 	  "Default" : "devopscloud.com"
 	},
-	
+
 	"EnvironmentType" : {
 	  "Description" : "Mode for rails to run in",
 	  "Type" : "String",
 	  "Default" : "development"
 	},
-	
+
 	"PrivateBucket" : {
       "Description" : "S3 bucket for storing credentials",
       "Type" : "String",
       "Default" : "stelligentlabs-private",
       "ConstraintDescription" : "Must be a valid S3 Bucket"
     },
-	
+
 	"PublicBucket" : {
 	  "Description" : "S3 bucket for storing build artifacts",
       "Type" : "String",
@@ -54,7 +54,7 @@
       "ConstraintDescription" : "Must be a valid S3 Bucket"
 	}
   },
-  
+
   "Mappings" : {
     "AWSInstanceType2Arch" : {
       "t1.micro"    : { "Arch" : "64" },
@@ -65,9 +65,9 @@
       "us-east-1"      : { "64" : "ami-7341831a" }
     }
   },
-    
-  "Resources" : {     
-      
+
+  "Resources" : {
+
     "CfnUser" : {
       "Type" : "AWS::IAM::User",
       "Properties" : {
@@ -124,7 +124,7 @@
 	  }
 	},
 
-    "WebServer": {  
+    "WebServer": {
       "Type": "AWS::EC2::Instance",
  	  "DependsOn" : "PrivateBucketPolicy",
 	  "Metadata" : {
@@ -163,7 +163,7 @@
                 "owner"  : "root",
                 "group"  : "root"
               },
-			  
+
 
 			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
@@ -185,8 +185,8 @@
 	          },
 			  "/etc/httpd/conf/passenger" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.13/ext/apache2/mod_passenger.so\n",
-	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.13\n",
+	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.19/ext/apache2/mod_passenger.so\n",
+	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.19\n",
 	              "PassengerRuby /usr/bin/ruby\n"
 	            ]]},
 	                "mode"   : "000500",
@@ -196,7 +196,7 @@
 			}
           }
         },
-		
+
 		"AWS::CloudFormation::Authentication" : {
 		  "S3AccessCreds" : {
 		    "type" : "S3",
@@ -226,18 +226,18 @@
 
 		  "# Build environment using Puppet\n",
           "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
-		
+
 		  "# Add in virtual hosts config\n",
 		  "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
 		  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
-		
+
 		  "# Add Public key for passwordless authentication from Jenkins Instance\n",
 		  "cat /home/ec2-user/id_rsa.pub >> /home/ec2-user/.ssh/authorized_keys\n",
-		
+
 		  "# Disable tty for ec2-user\n",
 		  "echo \"Defaults:%ec2-user !requiretty\" >> /etc/sudoers\n",
 		  "echo \"Defaults:ec2-user !requiretty\" >> /etc/sudoers\n",
-		
+
 		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
 
 		  "date > /home/ec2-user/stoptime"
@@ -248,7 +248,7 @@
     "IPAddress" : {
       "Type" : "AWS::EC2::EIP"
     },
-    
+
     "IPAssoc" : {
       "Type" : "AWS::EC2::EIPAssociation",
       "Properties" : {
@@ -256,7 +256,7 @@
         "EIP" : { "Ref" : "IPAddress" }
        }
     },
-    
+
     "FrontendGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
@@ -265,13 +265,13 @@
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0" },
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" }
         ]
-      }      
+      }
     },
 
 	"WaitHandle" : {
       "Type" : "AWS::CloudFormation::WaitConditionHandle"
     },
-    
+
     "WaitCondition" : {
       "Type" : "AWS::CloudFormation::WaitCondition",
       "DependsOn" : "WebServer",
@@ -279,9 +279,9 @@
         "Handle" : { "Ref" : "WaitHandle" },
         "Timeout" : "1200"
       }
-    }     
+    }
   },
-  
+
   "Outputs" : {
     "InstanceIPAddress" : {
       "Value" : { "Ref" : "IPAddress" }
