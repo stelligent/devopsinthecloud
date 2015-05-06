@@ -31,4 +31,4 @@ git status --porcelain | grep '^ D ' | awk '{print $2;}' | xargs -r git rm
 
 # And finally, commit and push
 git commit -m 'Automated commit of jenkins configuration' -a
-git push
+#git push
