@@ -18,21 +18,9 @@
     "InstanceType" : {
       "Description" : "EC2 instance type",
       "Type" : "String",
-      "Default" : "c1.medium",
+      "Default" : "t2.medium",
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
-
-	"ApplicationName" : {
-	  "Description" : "CNAME for the application",
-	  "Type" : "String",
-	  "Default" : "target"
-	},
-
-	"HostedZone" : {
-	  "Description" : "Domain to use",
-	  "Type" : "String",
-	  "Default" : "devopscloud.com"
-	},
 
 	"EnvironmentType" : {
 	  "Description" : "Mode for rails to run in",
@@ -57,12 +45,26 @@
 
   "Mappings" : {
     "AWSInstanceType2Arch" : {
-      "t1.micro"    : { "Arch" : "64" },
-      "m1.large"    : { "Arch" : "64" },
-      "c1.medium"   : { "Arch" : "64" }
+      "t2.micro"    : { "Arch" : "64" },
+      "t2.small"    : { "Arch" : "64" },
+      "t2.medium"   : { "Arch" : "64" },
+      "m3.medium"   : { "Arch" : "64" },
+      "m3.large"    : { "Arch" : "64" },
+      "m3.xlarge"   : { "Arch" : "64" },
+      "m3.2xlarge"  : { "Arch" : "64" },
+      "c4.large"    : { "Arch" : "64" },
+      "c4.xlarge"   : { "Arch" : "64" }
     },
     "AWSRegionArch2AMI" : {
-      "us-east-1"      : { "64" : "ami-7341831a" }
+      "us-east-1"      : { "32" : "ami-7f418316", "64" : "ami-1ecae776" },
+      "us-west-1"      : { "32" : "ami-951945d0", "64" : "ami-d114f295" },
+      "us-west-2"      : { "32" : "ami-16fd7026", "64" : "ami-e7527ed7" },
+      "eu-central-1"   : { "32" : "ami-dcfa4edd", "64" : "ami-a8221fb5" },
+      "eu-west-1"      : { "32" : "ami-24506250", "64" : "ami-a10897d6" },
+      "ap-southeast-1" : { "32" : "ami-74dda626", "64" : "ami-68d8e93a" },
+      "ap-southeast-2" : { "32" : "ami-74dda626", "64" : "ami-fd9cecc7" },
+      "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-cbf90ecb" },
+      "sa-east-1"      : { "32" : "ami-dcfa4edd", "64" : "ami-b52890a8" }
     }
   },
 
@@ -110,23 +112,9 @@
       }
     },
 
-	"Domain" : {
-      "Type" : "AWS::Route53::RecordSetGroup",
-	  "Properties" : {
-	    "HostedZoneName" : { "Fn::Join" : [ "", [ {"Ref" : "HostedZone"}, "." ]]},
-	    "RecordSets" : [
-		  {
-			"Name" : { "Fn::Join" : ["", [ { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "." ]]},
-			"Type" : "A",
-			"TTL"  : "900",
-			"ResourceRecords" : [ { "Ref" : "IPAddress" } ]
-		  }]
-	  }
-	},
-
     "WebServer": {
       "Type": "AWS::EC2::Instance",
- 	  "DependsOn" : "PrivateBucketPolicy",
+ 	  "DependsOn" : [ "PrivateBucketPolicy", "GatewayToInternet" ],
 	  "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "config" : {
@@ -167,10 +155,7 @@
 
 			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "NameVirtualHost *:80\n",
-	              "<VirtualHost *:80>\n",
-	              "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
-	              "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+	              "<VirtualHost ", { "Ref" : "IPAddress" }, ":80>\n",
 				  "RailsEnv ", {"Ref" : "EnvironmentType"}, "\n",
 				  "DocumentRoot /var/www/rails/public\n",
 				  "<Directory /var/www/rails/public>\n",
@@ -207,12 +192,14 @@
 		}
       },
       "Properties": {
-        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
-        "InstanceType"   : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
-        "KeyName"        : { "Ref" : "KeyName" },
-		"Tags" : [{ "Key" : "Name", "Value" : "Target Environment" }],
+        "ImageId"           : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                              { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "KeyName"           : { "Ref" : "KeyName" },
+		"Tags" : [{ "Key"   : "Name", "Value" : "Target Environment" }],
+        "InstanceType"      : { "Ref" : "InstanceType" },
+        "NetworkInterfaces" : [ { "NetworkInterfaceId" : { "Ref" : "mainXface" },
+                                  "DeviceIndex" : "0"
+                             } ],
 		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
 		  "#!/bin/bash -v\n",
 		  "date > /home/ec2-user/starttime\n",
@@ -246,26 +233,100 @@
     },
 
     "IPAddress" : {
-      "Type" : "AWS::EC2::EIP"
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : { "Domain" : "vpc" }
     },
 
     "IPAssoc" : {
       "Type" : "AWS::EC2::EIPAssociation",
       "Properties" : {
-        "InstanceId" : { "Ref" : "WebServer" },
-        "EIP" : { "Ref" : "IPAddress" }
+        "AllocationId" : { "Fn::GetAtt" : [ "IPAddress" , "AllocationId" ] },
+        "NetworkInterfaceId" : { "Ref" : "mainXface" }
        }
     },
+
+    "mainXface" : {                                                             
+        "Type" : "AWS::EC2::NetworkInterface",                                  
+        "Properties" : {                                                        
+                "GroupSet"                 : [ { "Ref" : "FrontendGroup" } ],   
+                "SubnetId"                 : { "Ref" : "PublicSubnet" },        
+                "Description"              : "ditc-target-app-interface",          
+                "SourceDestCheck"          : "true"                             
+        }                                                                       
+    },        
 
     "FrontendGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },
         "GroupDescription" : "Enable SSH and access to Apache",
         "SecurityGroupIngress" : [
           {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0" },
           {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" }
         ]
       }
+    },
+
+    "VPC" : {
+        "Type" : "AWS::EC2::VPC",
+        "Properties" : {
+            "EnableDnsSupport"      : "True",
+            "EnableDnsHostnames"    : "True",
+            "CidrBlock"             : "10.50.50.0/16",
+            "Tags" : [
+                { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+                { "Key" : "Network", "Value" : "Public" }
+            ]
+        }
+    },
+
+    "PublicSubnet" : {
+        "Type" : "AWS::EC2::Subnet",
+        "Properties" : {
+            "VpcId"     : { "Ref" : "VPC" },
+            "CidrBlock" : "10.50.50.0/24",
+            "Tags" : [
+                { "Key" : "Application" , "Value" : { "Ref" : "AWS::StackName" } },
+                { "Key" : "Netowrk", "Value" : "Public" }
+            ]
+        }
+    },
+
+    "InternetGateway" : {
+        "Type" : "AWS::EC2::InternetGateway"
+    },
+
+    "GatewayToInternet" : {
+        "Type" : "AWS::EC2::VPCGatewayAttachment",
+        "Properties" : {
+            "VpcId" : { "Ref" : "VPC" },
+            "InternetGatewayId" : { "Ref" : "InternetGateway" }
+        }
+    },
+
+    "PublicRouteTable" : {
+        "Type" : "AWS::EC2::RouteTable",
+        "Properties" : {
+            "VpcId" : { "Ref" : "VPC" }
+        }
+    },
+
+    "PublicRoute" : {
+        "Type" : "AWS::EC2::Route",
+        "DependsOn" : "GatewayToInternet",
+        "Properties" : {
+            "RouteTableId" : { "Ref" : "PublicRouteTable" },
+            "DestinationCidrBlock" : "0.0.0.0/0",
+            "GatewayId" : { "Ref" : "InternetGateway" }
+        }
+    },
+
+    "PublicSubnetRouteTableAssociation" : {
+        "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties" : {
+            "SubnetId" : { "Ref" : "PublicSubnet" },
+            "RouteTableId" : { "Ref" : "PublicRouteTable" }
+        }
     },
 
 	"WaitHandle" : {
@@ -292,12 +353,8 @@
     "ArtifactBucket" : {
       "Value" : { "Ref" : "PublicBucket" }
     },
-    "Domain" : {
-      "Value" : { "Fn::Join" : ["", [{ "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }]] },
-      "Description" : "Full domain"
-    },
 	"SampleApp" : {
-      "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "/"]] },
+      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ] }, "/"]] },
       "Description" : "URL for newly created Sample App"
     }
   }
