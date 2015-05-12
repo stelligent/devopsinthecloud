@@ -62,11 +62,6 @@
       "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-cbf90ecb" },
       "sa-east-1"      : { "32" : "ami-dcfa4edd", "64" : "ami-b52890a8" }
     },
-
-    "SubnetConfig": {
-        "VPC"       :   { "CIDR": "10.50.50.0/16" },
-        "Public"    :   { "CIDE": "10.50.50.0/24" }
-    }
   },
 
   "Resources" : {
