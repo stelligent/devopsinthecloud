@@ -1,0 +1,235 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "AWS CloudFormation CLI",
+
+  "Parameters" : {
+    "InstanceType" : {
+      "Description" : "WebServer EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.medium",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium",
+                          "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large",
+                          "c4.xlarge"
+                        ],
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+
+    "KeyName" : {
+      "Type" : "String",
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the web server"
+    }
+  },
+
+  "Mappings" : {
+    "AWSInstanceType2Arch" : {
+      "t2.micro"    : { "Arch" : "64" },
+      "t2.small"    : { "Arch" : "64" },
+      "t2.medium"   : { "Arch" : "64" },
+      "m3.medium"   : { "Arch" : "64" },
+      "m3.large"    : { "Arch" : "64" },
+      "m3.xlarge"   : { "Arch" : "64" },
+      "m3.2xlarge"  : { "Arch" : "64" },
+      "c4.large"    : { "Arch" : "64" },
+      "c4.xlarge"   : { "Arch" : "64" }
+    },
+    "AWSRegionArch2AMI" : {
+      "us-east-1"      : { "32" : "ami-7f418316", "64" : "ami-1ecae776" },
+      "us-west-1"      : { "32" : "ami-951945d0", "64" : "ami-d114f295" },
+      "us-west-2"      : { "32" : "ami-16fd7026", "64" : "ami-e7527ed7" },
+      "eu-central-1"   : { "32" : "ami-dcfa4edd", "64" : "ami-a8221fb5" },
+      "eu-west-1"      : { "32" : "ami-24506250", "64" : "ami-a10897d6" },
+      "ap-southeast-1" : { "32" : "ami-74dda626", "64" : "ami-68d8e93a" },
+      "ap-southeast-2" : { "32" : "ami-74dda626", "64" : "ami-fd9cecc7" },
+      "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-cbf90ecb" },
+      "sa-east-1"      : { "32" : "ami-dcfa4edd", "64" : "ami-b52890a8" }
+    }
+  },
+
+  "Resources" : {	
+	
+	"User" : {
+	      "Type" : "AWS::IAM::User",
+	      "Properties" : {
+	        "Path": "/",
+	        "Policies": [{
+	          "PolicyName": "root",
+	          "PolicyDocument": { "Statement":[{
+	            "Effect":"Allow",
+	            "Action":"*",
+	            "Resource":"*"
+	          }
+	        ]}
+	       }]
+	      }
+	    },
+	"HostKeys" : {
+		"Type" : "AWS::IAM::AccessKey",
+	    "Properties" : {
+	    "UserName" : { "Ref" : "User" }
+	  }
+    },
+    "WebServer" : {
+      "Type" : "AWS::EC2::Instance",
+      "DependsOn" : [ "GatewayToInternet" ],
+      "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+
+			"files" : {
+
+		    }
+          }
+        }
+      },
+      "Properties" : {
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "KeyName" : { "Ref" : "KeyName" },
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "NetworkInterfaces" : [ { "NetworkInterfaceId" :
+                                      { "Ref" : "mainXface" },
+                                      "DeviceIndex" : "0"
+                                } ],
+		"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+		  "#!/bin/bash -v\n",
+
+		  "yum update -y aws-cfn-bootstrap\n",
+
+		  "# Install Packages\n",
+		  "/opt/aws/bin/cfn-init -v -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
+		  "    --access-key ", { "Ref" : "HostKeys" },
+		  "    --secret-key ", { "Fn::GetAtt" : [ "HostKeys", "SecretAccessKey" ]},
+		  "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+		  "# Remove Ruby 1.8.7\n",
+		  "yum erase -y ruby rubygems\n",
+
+		  "# Install Ruby 1.9.3\n",
+		  "yum -y install ruby19-devel\n",
+		  "yum -y install libxml2-devel\n",
+		  "yum -y install libxslt-devel\n",
+		  "yum -y install git\n",
+		  "yum -y install make\n",
+		  "yum -y install gcc\n",
+		  "yum -y install java-1.6.0-openjdk\n",
+
+		  "# Move Ruby 1.9.3 to Default Ruby\n",
+		    "ln -s /usr/bin/ruby1.9 /usr/bin/ruby\n",
+		    "ln -s /usr/bin/gem1.9 /usr/bin/gem\n"
+		]]}}
+      }
+    },
+
+    "IPAddress" : {                                                             
+      "Type" : "AWS::EC2::EIP",                                                 
+       "Properties" : {                                                         
+            "Domain" : "vpc"                                                    
+       }                                                                        
+    },                                                                          
+                                                                                
+    "IPAssoc" : {                                                               
+      "Type" : "AWS::EC2::EIPAssociation",                                      
+      "Properties" : {                                                          
+        "AllocationId" : { "Fn::GetAtt" : [ "IPAddress" , "AllocationId" ] },   
+        "NetworkInterfaceId" : { "Ref" : "mainXface" }                          
+       }                                                                        
+    },                                                                          
+                                                                                
+    "mainXface" : {                                                             
+        "Type" : "AWS::EC2::NetworkInterface",                                  
+        "Properties" : {                                                        
+                "GroupSet"                 : [ { "Ref" : "FrontendGroup" } ],   
+                "SubnetId"                 : { "Ref" : "PublicSubnet" },        
+                "Description"              : "ditc-jenkins-interface",          
+                "SourceDestCheck"          : "true"                             
+        }                                                                       
+    },                                                                          
+                                                                                
+    "FrontendGroup" : {                                                         
+      "Type" : "AWS::EC2::SecurityGroup",                                       
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC" },                                            
+        "GroupDescription" : "Enable SSH and access",
+        "SecurityGroupIngress" : [                                              
+          { 
+            "IpProtocol" : "tcp",
+            "FromPort"   : "22",
+            "ToPort"     : "22",
+            "CidrIp"     : "0.0.0.0/0"
+          }
+        ]                                                                       
+      }                                                                         
+    }, 
+
+    "VPC" : {                                                                   
+        "Type" : "AWS::EC2::VPC",                                               
+        "Properties" : {                                                        
+            "EnableDnsSupport"      : "True",                                   
+            "EnableDnsHostnames"    : "True",                                   
+            "CidrBlock"             : "10.50.50.0/16",                          
+            "Tags" : [                                                          
+                { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+                { "Key" : "Network", "Value" : "Public" }                       
+            ]                                                                   
+        }                                                                       
+    },                                                                          
+                                                                                
+    "PublicSubnet" : {                                                          
+        "Type" : "AWS::EC2::Subnet",                                            
+        "Properties" : {                                                        
+            "VpcId"     : { "Ref" : "VPC" },                                    
+            "CidrBlock" : "10.50.50.0/24",                                      
+            "Tags" : [                                                          
+                { "Key" : "Application" , "Value" : { "Ref" : "AWS::StackName" } },
+                { "Key" : "Netowrk", "Value" : "Public" }                       
+            ]                                                                   
+        }                                                                       
+    },                                                                          
+                                                                                
+    "InternetGateway" : {                                                       
+        "Type" : "AWS::EC2::InternetGateway"                                    
+    },                                                                          
+                                                                                
+    "GatewayToInternet" : {                                                     
+        "Type" : "AWS::EC2::VPCGatewayAttachment",                              
+        "Properties" : {                                                        
+            "VpcId" : { "Ref" : "VPC" },                                        
+            "InternetGatewayId" : { "Ref" : "InternetGateway" }                 
+        }                                                                       
+    },                                                                          
+                                                                                
+    "PublicRouteTable" : {                                                      
+        "Type" : "AWS::EC2::RouteTable",                                        
+        "Properties" : {                                                        
+            "VpcId" : { "Ref" : "VPC" }                                         
+        }                                                                       
+    },                                                                          
+                                                                                
+    "PublicRoute" : {                                                           
+        "Type" : "AWS::EC2::Route",                                             
+        "DependsOn" : "GatewayToInternet",                                      
+        "Properties" : {                                                        
+            "RouteTableId" : { "Ref" : "PublicRouteTable" },                    
+            "DestinationCidrBlock" : "0.0.0.0/0",                               
+            "GatewayId" : { "Ref" : "InternetGateway" }                         
+        }                                                                       
+    },                                                                          
+                                                                                
+    "PublicSubnetRouteTableAssociation" : {                                     
+        "Type" : "AWS::EC2::SubnetRouteTableAssociation",                       
+        "Properties" : {                                                        
+            "SubnetId" : { "Ref" : "PublicSubnet" },                            
+            "RouteTableId" : { "Ref" : "PublicRouteTable" }                     
+        }                                                                       
+    }
+
+  },
+
+  "Outputs" : {
+    "Instance" : {
+      "Value" : { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ] },
+      "Description" : "DNS Name of the newly created EC2 instance"
+    }
+  }
+}
