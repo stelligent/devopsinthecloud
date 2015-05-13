@@ -120,7 +120,7 @@
           "config" : {
             "packages" : {
               "yum" : {
-                "puppet"   : []
+                "puppet3"   : []
               }
             },
 
@@ -152,7 +152,6 @@
                 "group"  : "root"
               },
 
-
 			  "/etc/httpd/conf/virtualhosts" : {
 	            "content" : { "Fn::Join" : ["", [
 	              "<VirtualHost ", { "Ref" : "IPAddress" }, ":80>\n",
@@ -170,9 +169,9 @@
 	          },
 			  "/etc/httpd/conf/passenger" : {
 	            "content" : { "Fn::Join" : ["", [
-	              "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.19/ext/apache2/mod_passenger.so\n",
-	              "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.19\n",
-	              "PassengerRuby /usr/bin/ruby\n"
+	              "LoadModule passenger_module /usr/local/share/ruby/gems/2.0/gems/passenger-5.0.7/buildout/apache2/mod_passenger.so\n",
+	              "PassengerRoot /usr/local/share/ruby/gems/2.0/gems/passenger-5.0.7\n",
+	              "PassengerRuby /usr/bin/ruby2.0\n"
 	            ]]},
 	                "mode"   : "000500",
 	                "owner"  : "root",
