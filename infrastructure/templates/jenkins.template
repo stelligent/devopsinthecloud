@@ -146,6 +146,7 @@
                 "rubygem20-io-console"  : [],
                 "ruby20-devel"          : [],
                 "rubygems20-devel"      : [],
+                "aws-sdk-v1"            : [],
                 "mysql-devel"           : []
               }
             },

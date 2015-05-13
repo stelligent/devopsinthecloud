@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'aws-sdk'
+require 'aws-sdk-v1'
 load File.expand_path('../../config/aws.config', __FILE__)
 
 sdb = AWS::SimpleDB.new
