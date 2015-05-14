@@ -286,7 +286,7 @@
 		  "gem install aws-sdk-v1\n",
 		  "gem install cucumber --version 1\n",
 		  "gem install net-ssh\n",
-		  "gem install capistrano\n",
+		  "gem install capistrano --version \"=2.15.5\"\n",
 
 		  "# Add Tomcat user to sudoers and disable tty\n",
 		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
