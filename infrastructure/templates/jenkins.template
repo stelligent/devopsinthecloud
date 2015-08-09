@@ -7,8 +7,7 @@
 
     "KeyName" : {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
-      "Type" : "String",
-	  "Default" : "ditc",
+      "Type": "AWS::EC2::KeyPair::KeyName",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[-_ a-zA-Z0-9]*",
@@ -18,7 +17,7 @@
     "InstanceType" : {
       "Description" : "WebServer EC2 instance type",
       "Type" : "String",
-      "Default" : "c4.large",
+      "Default" : "m3.xlarge",
       "ConstraintDescription" : "Must be a valid EC2 instance type."
     },
 
@@ -46,6 +45,8 @@
       "m2.xlarge"   : { "Arch" : "64" },
       "m2.2xlarge"  : { "Arch" : "64" },
       "m2.4xlarge"  : { "Arch" : "64" },
+      "m3.medium"   : { "Arch" : "64" },
+      "m3.xlarge"   : { "Arch" : "64" },
       "c1.medium"   : { "Arch" : "64" },
       "c1.xlarge"   : { "Arch" : "64" },
       "cc1.4xlarge" : { "Arch" : "64" },
