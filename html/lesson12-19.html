@@ -1,0 +1,109 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">2.5 Document Build Steps</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Document the steps for deploying a software package.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+              <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Assumptions</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Environment(s) have been properly installed and configured and are running.</li>   
+                                    <li>Ant has been installed.</li>
+                                    <li>Git client has been installed.</li>
+                                    <li>https://github.com/stelligent/continuous_integration_example repo has been cloned locally.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">High-Level Steps</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Compile the source code.</li>   
+                                    <li>Run static analysis on the application code.</li>
+                                    <li>Launch the environment provisioning.</li>
+                                    <li>Launch the deployment.</li>
+                                    <li>Run functional tests on the application.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Detailed Steps</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Go to software directory.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/continuous_integration_example/software</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>   
+                                     <li>Get latest changes from GitHub.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git pull</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                     <li>Run an Ant build.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ ant</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Document additional build steps</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Document additional steps that might occur in a <strong>build process</strong> in a text file. Upload a text file with your answers into your <strong>cd29artifacts</strong> S3 bucket (where <strong>00</strong> is your student id).</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

@@ -1,0 +1,87 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">9.1 - Write scripted unit tests</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>View and run unit tests.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">View and run unit tests</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                     <li>If you haven't done so already, run the <strong>TargetEnvironment</strong> job on your Jenkins instance.</li>
+                            <li>SSH into this target environment instance. Your Public DNS will be different
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ ssh -i ditc.pem ec2-user@IPADDRESS</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                          <li>Go to the Rails deployment directory.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ cd /var/www/rails</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                            <li>Apply database tables
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ sudo rake db:migrate</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                            <li>Prepare the tests using Rake
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ sudo rake test:prepare</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                            <li>Run Bundler. Files to download are specified in Gemfile
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ sudo bundle install</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                          <li>Run the RSpec tests
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ sudo rspec spec/</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+</ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

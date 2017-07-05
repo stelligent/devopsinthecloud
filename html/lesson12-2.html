@@ -1,0 +1,300 @@
+            <div class="main-body-div" id="main-box">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">1.1 Setup Learning Environment</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Setup your environments.</li>
+                        <li>Launch a CloudFormation stack.</li>
+                        <li>Create a Key Pair.</li>
+                        <li>Create an S3 bucket.</li>
+                        <li>Access GitHub repos.</li>
+                        <li>Establish SSH keys.</li>
+                        <li>Launch and SSH into an EC2 instance.</li>
+                        <li>Review course resources.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                    <!-- inner body ends here -->
+               <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: (Windows Only) Download and Install Putty</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Follow the instructions for using Putty in Windows <a href="http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/putty.html" target="_blank">http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/putty.html</a>. You will download <strong>putty</strong>, <strong>pscp</strong> and <strong>puttygen</strong> from <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html" target="_blank">http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html</a></li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+                 <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Login to your AWS account</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Verify that you're able to login to your assigned student account by going to <a href="http://aws.amazon.com/console?region=us-east-1" target="_blank">http://aws.amazon.com/console?region=us-east-1</a> and enter your username and password. Your username is <strong>student01</strong>, <strong>student02</strong> or other similar pattern. Your password will be given to you by the instructor.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Create a New Key Pair</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Go to the list of key pairs by logging into <a href="http://aws.amazon.com/console?region=us-east-1" target="_blank">http://aws.amazon.com/console?region=us-east-1</a> and going to the <strong>EC2</strong> tab in the Management console. Then, select the <strong>Key Pairs</strong> link on the left panel.</li>
+                                <li>Select the <strong>Create Key Pair</strong> button and enter <strong>cd29</strong> in the <strong>Key Pair Name field</strong> and the <strong>Create</strong> button (where <strong>29</strong> is your student id). Save the file onto your computer for future use. Click the <strong>Close</strong> button.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+               <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Launch an AWS Utility instance using CloudFormation</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Login to <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1" target="_blank">CloudFormation</a>. Click the <strong>Create New Stack</strong> button. Enter AWSCLI29 (where <strong>29</strong> is your student id) in the <strong>Stack Name</strong> field and https://s3.amazonaws.com/filescdcourse/templates/base.template in the <strong>Provide a Template URL</strong> field. This template is provided courtesy of AWS Training.</li>
+                                <li>Click <strong>Continue</strong>.</li>
+                                <li>In the <strong>KeyName</strong> field, enter the key pair (i.e. <strong>cd29</strong>) that you created in the previous section. Select the checkbox next to <strong>I acknowledge that this template may create IAM resources</strong> and click Continue.</li>
+                                <li>Click Continue again, then Close.</li>
+                                <li>Once the status in CloudFormation is <strong>CREATE_COMPLETE</strong>, select the checkbox next to AWSCLI29. (where <strong>29</strong> is your student id)</li>
+                                <li>Select the Outputs tab in the bottom panel and copy the DNS name for the instance into your clipboard</li>
+                                <li>(*.nix-only environments) Find the <strong>cd29.pem</strong> file on your computer (where <strong>29</strong> is your student id). If you are are a *nix-based computer, you will need to modify the permissions to 400.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ chmod 400 cd29.pem</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->     
+                                </li>
+                                <li>From the directory where your <strong>cd29.pem</strong> (where <strong>29</strong> is your student id) is located, enter the command below to SSH into the utility instance. In the example below, modify PUBLIC_DNS to your the public DNS provided as a value when selecting <strong>Outputs</strong> tab for the AWSCLI CloudFormation template you created.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ ssh -i cd29.pem ec2-user@PUBLIC_DNS</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->     
+                                </li>
+                                <li>Enter <strong>yes</strong> to the security prompt.</li> 
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+                 <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Create an S3 bucket to host credentials</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Create a new S3 bucket and call it <strong>cd29creds</strong> (where <strong>29</strong> is your student id). Use <a href="https://console.aws.amazon.com/s3/home" target="_blank">https://console.aws.amazon.com/s3/home</a> and click the <strong>Create Bucket button</strong>. IMPORTANT: Be sure to choose <strong>US Standard</strong> in the Region dropdown box</li>
+                            </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+                  <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Create an S3 bucket to host artifacts</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Create a new S3 bucket and call it <strong>cd29creds</strong> (where <strong>29</strong> is your student id). Use <a href="https://console.aws.amazon.com/s3/home" target="_blank">https://console.aws.amazon.com/s3/home</a> and click the <strong>Create Bucket button</strong>. IMPORTANT: Be sure to choose <strong>US Standard</strong> in the Region dropdown box</li>
+                            </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Apply a bucket policy using CloudFormation</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Login to <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1" target="_blank">CloudFormation</a>. Click the <strong>Create New Stack button</strong>. Enter policy29 (where <strong>29</strong> is your student id) in the <strong>Stack Name</strong> field and https://stelligentlabs.s3.amazonaws.com/templates/account_bucket_policies.template in the <strong>Provide a Template URL</strong> field.</li>
+                            <li>Click Continue.</li>
+                            <li>Enter the name of the bucket you just created (e.g. "cd29artifacts" - where <strong>29</strong> is your student id) and click Continue.</li>
+                            <li>Click Continue again, then Close.</li>
+                            <li>Once the status in CloudFormation is <strong>CREATE_COMPLETE</strong>, the policy has been applied to your S3 bucket.</li>
+                            </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Setup your GitHub Account</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Login to your account by going to <a href="https://github.com/login/" target="_blank">https://github.com/login</a></li>
+                            <li>Go to <a target="_blank" href="https://github.com/stelligent/continuous_integration_example">https://github.com/stelligent/continuous_integration_example</a></li>
+                            <li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                            <li>Go to <a href="https://github.com/stelligent/devopsinthecloud/" target="_blank">https://github.com/stelligent/devopsinthecloud</a></li>
+                            <li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                             <li>Go to <a href="https://github.com/stelligent/sample_app/" target="_blank">https://github.com/stelligent/sample_app</a></li>
+                              <li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                            <li>Go to <a href="https://github.com/stelligent/devcenter-embedded-tomcat" target="_blank">https://github.com/stelligent/devcenter-embedded-tomcat</a></li>
+<li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                            <li>Go to <a href="https://github.com/stelligent/ciexample_jenkins" target="_blank">https://github.com/stelligent/ciexample_jenkins</a></li>
+                            <li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                            <li>Create an SSH keypair by SSH'ing to the AWSCLI instance you created when launching the CloudFormation stack in the section above. In the example below, you will use the email address that's registered with your GitHub account. You can find yours by going to <a href="https://github.com/settings/profile/" target="_blank">https://github.com/settings/profile/</a>. Accept the defaults after running this command below. <strong>NOTE: Use your student id instead of 29</strong>. For example, student03@stelligent.com
+                           <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ ssh-keygen -t rsa -C "student29@stelligent.com"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->           
+                            </li>
+                             <li>Display the contents of the public key and copy the contents to your clipboard.
+                           <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cat ~/.ssh/id_rsa.pub</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->           
+                            </li>
+                            <li>After logging into your GitHub account, go to your GitHub SSH Keys settings at <a href="https://github.com/settings/ssh/" target="_blank">https://github.com/settings/ssh/</a>. Click on the <strong>Add SSH Key</strong> button, give it a name and paste the contents of the public key into the <strong>Key</strong> text field. Then, click the <strong>Add key</strong> button. Enter your GitHub password when prompted.</li>
+                            <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>student29</strong> with your GitHub userid.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/continuous_integration_example.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> </li>
+                             <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>student29</strong> with your GitHub userid.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/devopsinthecloud.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> </li>
+                                 <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>student29</strong> with your GitHub userid.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/sample_app.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> </li>
+                                 <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>student29</strong> with your GitHub userid.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/devcenter-embedded-tomcat.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> </li>
+                                <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>student29</strong> with your GitHub userid.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/ciexample_jenkins.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> </li>
+                                   <li>From the home directory on the AWSCLI, type ls from the command prompt. You should see <strong>continuous_integration_example</strong>, <strong>devopsinthecloud</strong>, <strong>sample_app</strong>, <strong>devcenter-embedded-tomcat</strong> and <strong>ciexample_jenkins</strong> as subdirectories.</li>
+                            </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Upload SSH keys</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li><strong>Mac</strong>: Secure copy the SSH key files to your computer. Your Public DNS will be different. This example assumes you're installing to your <strong>Desktop</strong> folder on your Mac.
+                                  <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">scp -i cd29.pem ec2-user@PUBLIC_DNS:~/.ssh/id_rsa ~/Desktop
+scp -i cd29.pem ec2-user@PUBLIC_DNS:~/.ssh/id_rsa.pub ~/Desktop
+scp -i cd29.pem ec2-user@PUBLIC_DNS:~/.ssh/known_hosts ~/Desktop</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                            <li><strong>Windows</strong>strong>: Secure copy the SSH key files to your computer. Your Public DNS will be different. This example assumes that <strong>pscp.exe</strong>strong> and <strong>cd29.ppk</strong>strong> are installed at <strong>c:\putty</strong>strong>. Modify the locations if yours are different.
+                                  <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">c:\putty\pscp.exe -i c:\putty\cd00.ppk ec2-user@PUBLIC_DNS:/home/ec2-user/.ssh/id_rsa 
+c:\putty
+c:\putty\pscp.exe -i c:\putty\cd00.ppk ec2-user@PUBLIC_DNS:/home/ec2-user/.ssh/id_rsa.pub 
+c:\putty
+c:\putty\pscp.exe -i c:\putty\cd00.ppk ec2-user@PUBLIC_DNS:/home/ec2-user/.ssh/known_hosts c:\putty</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                            </li>
+                        <li>In <a href="https://console.aws.amazon.com/s3/home" target="_blank">https://console.aws.amazon.com/s3/home</a>, go to the bucket you created above (e.g. cd29creds).</li>
+                            <li>Click on the <strong>Upload</strong> button.</li>
+                            <li>Click <strong>Add Files</strong>strong> and add the <strong>id_rsa</strong>, <strong>id_rsa.pub</strong> and known_hosts files from the commands above to the <strong>cd29creds</strong> S3 bucket (where <strong>29</strong> is your student id).</li>
+                            <li>Click <strong>Start Upload</strong>.</li>
+                            </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+              <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">CLASS EXERCISE: Tools, Commands</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                        <li><strong>Tools</strong>: <a href="http://paulduvall.io/11.tools.html" target="_blank">Tools used in Course</a>. </li>
+                            <li><strong>Command-Line Options</strong>: <a href="http://paulduvall.io/11.commands.html" target="_blank">Commonly-used Commands</a>. </li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+                 <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">CLASS EXERCISE: About the sample applications</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                        <li><strong>Java App</strong> - This example application uses Java, Ant/Maven, MySQL, Tomcat on Linux. All of the application code, infrastructure, configuration and data is located at <a href="https://github.com/stelligent/continuous_integration_example/" target="_blank">https://github.com/stelligent/continuous_integration_example/</a>.</li>
+                            <li><strong>Ruby App</strong> - This example application uses Rails, Rake, HSQL, Passenger on Linux. All of the application code and data is located at https://github.com/stelligent/sample_app/. All of the infrastructure and configuration is located at <a href="https://github.com/stelligent/devopsinthecloud/" target="_blank">https://github.com/stelligent/devopsinthecloud/</a></li>
+                         <li><strong>Maven Example</strong> - This example application uses Java, Tomcat and Maven. All of the application code is located at <a href="https://github.com/heroku/devcenter-embedded-tomcat/" target="_blank">https://github.com/heroku/devcenter-embedded-tomcat/</a>.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+       <!--  main div box close here--></div>
+       <!-- Page Content Wrapper--></div>
+    <!-- /#wrapper -->

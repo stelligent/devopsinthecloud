@@ -1,0 +1,120 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">3.2 Infrastructure Tests</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Define and run infrastructure tests in Cucumber.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+        <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Running Infrastructure Tests in Cucumber for Java app</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>SSH into the AWSCLI instance. Your DNS name will be different.
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">ssh -i cd29.pem ec2-user@PublicDNS</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Go to the directory where Cucumber tests are located. See <a href="https://github.com/stelligent/continuous_integration_example/tree/master/software/tests/infrastructure/features" target="_blank">https://github.com/stelligent/continuous_integration_example/tree/master/software/tests/infrastructure/features</a>
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /home/ec2-user/continuous_integration_example/software/tests/infrastructure/features</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Open the target.feature file.
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">sudo vim target.feature</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Enter the command to run infrastructure tests remotely. You can get the IP Address of the target environment by going to the Outputs tab of the target environment stack in CloudFormation.
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cucumber target.feature env_ip=IPADDRESS_TARGETENV env_user=ec2-user</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>NOTE: These infrastructure tests are run as part of the <strong>TargetEnvironment</strong> job.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Running Infrastructure Tests in Cucumber (OPTIONAL)</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>SSH into the AWSCLI instance - where <strong>29</strong> is your student id.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">ssh -i cd29.pem ec2-user@PublicDNS</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                    </li>
+                                    <li>Go to the directory where Cucumber tests are located.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /home/ec2-user/devopsinthecloud/test/features</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Open the <strong>target.feature</strong> file.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">sudo vim target.feature</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Enter the command to run infrastructure tests remotely. You can get the IP Address of the target environment by going to the Outputs tab of the target environment stack in CloudFormation.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cucumber target.feature env_ip=IPADDRESS_TARGETENV env_user=ec2-user</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>NOTE: These infrastructure tests are run as part of the <strong>TargetEnvironment</strong> job.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

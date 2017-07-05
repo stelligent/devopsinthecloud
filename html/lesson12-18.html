@@ -1,0 +1,162 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">2.4 Document Environment Provisioning Steps</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Document the steps for deploying a software package.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+              <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Assumptions</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>None</li>   
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">High-Level Steps: Infrastructure</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Get Servers and Tools from repository: mysql-server, mysql, ant, tomcat6, and maven.</li>   
+                                    <li>Install, configure and run MySQL as a Linux service.</li>
+                                    <li>Assign MySQL root password.</li>
+                                    <li>Get source code from Git version-control repo.</li>
+                                    <li>Configure and run Tomcat as a Linux service.</li>
+                                    <li>Configure and run the MySQL database as a Linux service.</li>
+                                    <li>Modify the Security Groups for 8080.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Detailed Steps</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Get Servers and Tools from repository: mysql-server, mysql, ant, tomcat6, and maven.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">sudo yum -y install mysql-server mysql ant tomcat6 maven</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>   
+                                     <li>Run MySQL as a Linux service.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">sudo service mysqld start</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                     <li>Assign MySQL root password.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">/usr/bin/mysqladmin -u root password 'mysql'</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                    <li>Get source code from Git version-control repo.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">git clone git@github.com:stelligent/continuous_integration_example.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                    <li>Configure and run Tomcat as a Linux service. Note: This installs to /usr/share/tomcat6/webapps
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /etc/init.d/
+sudo chmod u+x tomcat6
+./tomcat6 status
+sudo chkconfig --add tomcat6
+sudo service tomcat6 start
+sudo chkconfig tomcat6 on
+./tomcat6 status</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                    <li>Configure and run the MySQL database as a Linux service.
+                                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /etc/init.d/
+sudo chmod u+x mysqld
+sudo ./mysqld status
+sudo chkconfig --add mysqld
+sudo service mysqld start
+sudo chkconfig mysqld on
+sudo ./mysqld status</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li> 
+                                     <li>Modify the Security Groups for 8080.</li> 
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Examples</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Download example instructions from <a href="https://s3.amazonaws.com/cdcourse/pub/files/provision_ec2_centos.pdf" target="_blank">https://s3.amazonaws.com/cdcourse/pub/files/provision_ec2_centos.pdf</a>.</li>   
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Document Additional Environment Provisioning Steps</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Document additional steps that might occur when <strong>provisioning an environment</strong>. Document these steps in text file and upload your answers to your <strong>cd29artifacts</strong> S3 bucket (where <strong>00</strong> is your student id).</li>   
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

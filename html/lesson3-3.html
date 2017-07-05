@@ -1,0 +1,81 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">3.3 - Elastic Compute Cloud (EC2) virtual instances</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Launch an EC2 instance.</li>
+                        <li>Terminate an EC2 instance.</li>
+                        <li>Assign a security group to an EC2 instance.</li>
+                        <li>SSH into an EC2 instance.</li>
+                    </ul>
+               </div>  
+                     </div>
+                     </div>
+                 </div>
+            <!-- inner body ends here -->  
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">Launch an EC2 instance</h4>
+                            <div class="inner-body panel">
+                                <p>Create a Security Group with SSH access to port 22.</p>
+                                <ul class="ul-listed">
+	                          <li>Go to the EC2 tab on the management console: <a href="https://console.aws.amazon.com/ec2/" target="_blank">https://console.aws.amazon.com/ec2/</a>.</li>
+                              <li>Click the <strong>Launch Instance</strong> button.</li>
+                              <li>Click the <strong>Continue</strong> button from the Classic wizard.</li>
+                              <li>Click on the Select button for the 64-bit version of the Amazon Linux AMI</li>
+                               <li>Use the default instance type: t1.micro and click Continue.</li>
+                               <li>Use the default in "Advanced Instance Options" step and click Continue.</li>
+                            <li>Enter ssh in the Name tag value and click Continue.</li>
+                            <li>Select the Create a new Key Pair radio button and enter "ditc" in the "Enter a name for your key pair" field and click the " Create and Download your Key Pair" link. Save the file onto your computer for future use. Click the Continue button.</li>
+                            <li>Select the ssh security group that you created in sublesson 3.3 and click the Continue button.</li>
+                            <li>Click the Launch button.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+           <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">Access your EC2 instance</h4>
+                            <div class="inner-body panel">
+                                <p>Access the instance you previously launched.</p>
+                                <ul class="ul-listed">
+	                          <li>Find the "ditc.pem" file on your computer. If you are are a *nix-based computer, you will need to modify the permissions to 400.</li>
+                              <li>Select the checkbox next to the instance you launched in the previous set of steps.</li>
+                              <li>Click on Instance Actions button and select Connect from the menu.</li>
+                              <li>From the "Connect from your browser using the Java SSH Client (Java Required)" section, enter the fully qualified path in the "Private key path" field where your ditc.pem file is located and click the Launch SSH client button.</li>
+                               <li>Type a few commands from the console.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">Terminate an EC2 instance</h4>
+                            <div class="inner-body panel">
+                                <p>Terminate an EC2 instance.</p>
+                                <ul class="ul-listed">
+	                              <li>Again, select the checkbox next to the instance you launched in the previous set of steps and click on Instance Actions button and select Terminate from the menu. Then, click the Yes, Terminate button.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- container-fluid ends here -->
+   <!--  main div box close here--> </div>
+        <!-- Page Content Wrapper--> </div>
+    <!-- /#wrapper -->

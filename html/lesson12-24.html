@@ -1,0 +1,95 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">3.3 Write scripted deployment (smoke) tests</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>View and run a deployment test.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+        <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: View and run a suite of deployment tests</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>On your AWS CLI instance or your local environment, go to the test directory. See <a href="https://github.com/stelligent/continuous_integration_example/tree/master/software/tests/infrastructure/features" target="_blank">https://github.com/stelligent/continuous_integration_example/tree/master/software/tests/infrastructure/features</a>
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/continuous_integration_example/software/tests/infrastructure/features</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Open the <strong>deployment.feature</strong> file. 
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim deployment.feature</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Modify target environment DNS. Change <strong>target.devopscloud.com</strong> to the DNS of the target environment. You can find this by going to your <strong>Jenkins Environment</strong> job and look for echo <strong>ip_address</strong>= in the Console Output of the job. Copy this value and paste it into the <strong>deployment.feature</strong> test. Save the file and push it to your Github master.
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">Scenario: The application is up and running
+  When I run "/usr/bin/wget -qO- http://target.devopscloud.com"
+  Then I should see "Brewery Manager"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                     <li>Go to your Jenkins instance and run the <strong>Deployment</strong> job.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: View and run a suite of deployment tests (OPTIONAL)</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>On your AWS CLI instance or your local environment, go to the tests directory.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/devopsinthecloud/test/features</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                    </li>
+                                    <li>Open the <strong>deployment.feature</strong> file.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim deployment.feature</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Go to your Jenkins instance and run the <strong>Deployment</strong> job.</li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

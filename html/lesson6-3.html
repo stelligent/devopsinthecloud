@@ -1,0 +1,47 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">6.3 - Set up and utilize a dependency-management repository</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Define dependency management approaches in a CI server.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                    <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Dependency Management using Jenkins an S3</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                     <li>Select the <strong>Build</strong> job in Jenkins.</li>
+                                    <li>Select <strong>Configure</strong>.</li>
+                                    <li>Go to <strong>Post-build Actions</strong>.</li>
+                                    <li>View the <strong>Publish artifacts to S3 Bucket</strong> and <strong>S3 profile</strong>.</li>
+                                    <li>View the <strong>Files to upload</strong> - Source and Destination bucket.</li>
+                                     <li>See the following command in <a href="https://github.com/stelligent/devopsinthecloud/blob/master/deployment/config/deploy.rb" target="_blank">deploy.rb</a>.
+                                     <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">set :artifact_url,     "https://s3.amazonaws.com/#{artifact_bucket}/#{artifact}"</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                    </li>
+                                    <li>View the <strong>Files to upload</strong> - Source and Destination bucket.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

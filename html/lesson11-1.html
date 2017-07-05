@@ -1,0 +1,32 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">Shutting down all AWS services</h2>
+                    <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Shutting down all AWS services</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                             <li>Remove all SQS queues: https://console.aws.amazon.com/sqs/home.</li>
+                            <li>Remove all files from the ~/.ssh directory. Remove all files from the ~/GIT directory. Remove all files from the ~/tmp directory.</li>
+                            <li>Delete Auto Scaling Groups.</li>
+                            <li>Delete Launch Configurations as-describe-launch-configs as-describe-auto-scaling-groups as-delete-launch-config as-delete-auto-scaling-group.</li>
+                            <li>Delete ELBs.</li>
+                            <li>Delete the GitHub SSH keys on the GitHub website https://github.com/settings/ssh/.</li>
+                            <li>Delete all key pairs https://console.aws.amazon.com/ec2/home?region=us-east-1#s=KeyPairs.</li>
+                            <li>Remove all security groups (except default can’t be deleted) https://console.aws.amazon.com/ec2/home?region=us-east-1#s=SecurityGroups.</li>
+                            <li>Terminate all CFN stacks https://console.aws.amazon.com/cloudformation/.</li>
+                            <li>Delete S3 buckets except for devopscloud and stelligentlabs https://console.aws.amazon.com/s3/.</li>
+                            <li>Remove the ditc.pem file (or other pem keys from your computer) ~/Desktop ~/Keys.</li>
+                            <li>Delete Access Key ID and Secret Access Key https://aws-portal.amazon.com/gp/aws/securityCredentials.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

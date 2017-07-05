@@ -1,0 +1,219 @@
+    <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">4.4 Script a build in Maven</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Script a build in Maven that packages software so that it can be deployed.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">EXERCISE: Run a Maven build</h4>
+                        <div class="inner-body panel">
+                          <ul class="ul-listed">
+                            <li>From the AWSCLI home directory, download and unzip Maven
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo wget http://apache.etoak.com/maven/binaries/apache-maven-3.0.4-bin.zip</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ unzip apache-maven-3.0.4-bin.zip</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>  
+                              <li>Go to the build directory, make a directory called maven and change to this directory.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/continuous_integration_example/software/build</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                             <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ mkdir maven</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                             <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd maven</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                              <li>Type <strong>mvn</strong> from the command line
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">/home/ec2-user/apache-maven-3.0.4/bin/mvn</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                <p>You should receive a message like this:</p>
+                               <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">[ERROR] No goals have been specified for this build.</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->    
+                              </li>   
+                            <li>From /home/ec2-user/continuous_integration_example/software/build/maven, do a <strong>git clone</strong>.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git clone git@github.com:student29/devcenter-embedded-tomcat.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Change directory to devcenter-embedded-tomcat
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/continuous_integration_example/software/build/maven/devcenter-embedded-tomcat</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Create a Maven build file called <strong>mypom.xml</strong>
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim mypom.xml</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Enter the Maven contents below in the mypom.xml (Originally from https://github.com/heroku/devcenter-embedded-tomcat/blob/master/pom.xml)
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+&lt;groupId&gt;com.heroku.sample&lt;/groupId&gt;
+&lt;artifactId&gt;embeddedTomcatSample&lt;/artifactId&gt;
+&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;name&gt;embeddedTomcatSample Maven Webapp&lt;/name&gt;
+&lt;url&gt;http://maven.apache.org&lt;/url&gt;
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-embed-core&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-embed-logging-juli&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-jasper&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-jasper-el&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+      &lt;artifactId&gt;tomcat-jsp-api&lt;/artifactId&gt;
+      &lt;version&gt;7.0.22&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+&lt;build&gt;
+  &lt;finalName&gt;embeddedTomcatSample&lt;/finalName&gt;
+  &lt;plugins&gt;
+      &lt;plugin&gt;
+          &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+          &lt;artifactId&gt;appassembler-maven-plugin&lt;/artifactId&gt;
+          &lt;version&gt;1.1.1&lt;/version&gt;
+          &lt;configuration&gt;
+              &lt;assembleDirectory&gt;target&lt;/assembleDirectory&gt;
+              &lt;programs&gt;
+                  &lt;program&gt;
+                      &lt;mainClass&gt;launch.Main&lt;/mainClass&gt;
+                      &lt;name&gt;webapp&lt;/name&gt;
+                  &lt;/program&gt;
+              &lt;/programs&gt;
+          &lt;/configuration&gt;
+          &lt;executions&gt;
+              &lt;execution&gt;
+                  &lt;phase&gt;package&lt;/phase&gt;
+                  &lt;goals&gt;
+                      &lt;goal&gt;assemble&lt;/goal&gt;
+                  &lt;/goals&gt;
+              &lt;/execution&gt;
+          &lt;/executions&gt;
+      &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+&lt;/project&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>cd /home/ec2-user/continuous_integration_example/software/build/maven/devcenter-embedded-tomcat/src/main/java/launch</li>
+                              <li>Open port 8180 in EC2 Security Group (e.g. AWSCLI00-Ec2SecurityGroup...)</li>
+                              <li>Type mvn from the command line
+                               <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">/home/ec2-user/apache-maven-3.0.4/bin/mvn package</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                              <li>Start the web application
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">sh target/bin/webapp</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Run the web application. Open your web browser to the following URL (your DNS will be different): <a href="http://ec2-107-21-81-107.compute-1.amazonaws.com:8180/" target="_blank">http://ec2-107-21-81-107.compute-1.amazonaws.com:8180/</a></li>
+                          </ul>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

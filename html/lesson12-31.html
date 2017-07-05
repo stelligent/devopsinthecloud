@@ -1,0 +1,230 @@
+    <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">4.7 Script a deployment</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Write a deployment script in Capistrano.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">EXERCISE: Modify Capistrano script.</h4>
+                        <div class="inner-body panel">
+                          <ul class="ul-listed">
+                            <li>Go to the <strong>deployment/config</strong> directory.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /home/ec2-user/continuous_integration_example/software/deployment/config</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                          </li>  
+                              <li>Create a new file called <strong>mydeploy.rb</strong>
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim mydeploy.rb</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                              <li>Insert the contents of the code example below into the <strong>mydeploy.rb</strong>. Be sure to replace the <strong>29</strong> in <strong>cd29</strong> with your userid.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">require 'rubygems'
+require 'aws-sdk'
+load '/usr/share/tomcat6/scripts/config/aws.config'
+
+sdb = AWS::SimpleDB.new
+
+set :sdb_domain, "cd29"
+
+set :domain do
+  item = sdb.domains["#{sdb_domain}"].items['parameters']
+  item.attributes['ip_address'].values[0].to_s
+end
+
+set :artifact_bucket do
+  item = sdb.domains["#{sdb_domain}"].items['parameters']
+  item.attributes['artifact_bucket'].values[0].to_s
+end
+
+set :ip_address do
+  item = sdb.domains["#{sdb_domain}"].items['parameters']
+  item.attributes['ip_address'].values[0].to_s
+end
+
+set :user,             "ec2-user"
+set :use_sudo,         false
+set :deploy_to,        "/usr/share/tomcat6/webapps"
+set :artifact,         "brewery.war"
+set :artifact_url,     "https://s3.amazonaws.com/#{artifact_bucket}/#{artifact}"
+set :ssh_options,      { :forward_agent => true }
+
+set :application, domain
+
+role :web, domain
+role :app, domain
+role :db,  domain, :primary => true
+
+set :deploy_via, :remote_cache
+
+def get_binding
+  binding # So that everything can be used in templates generated for the servers
+end
+
+def from_template(file)
+  require 'erb'
+  template = File.read(File.join(File.dirname(__FILE__), "..", file))
+  result = ERB.new(template).result(self.get_binding)
+end
+
+namespace :deploy do
+
+  task :setup do
+    run "sudo chown -R tomcat:tomcat #{deploy_to}"
+    run "sudo service tomcat6 stop"
+  end
+
+  task :deploy do
+    run "cd #{deploy_to} && sudo rm -rf brewery* && sudo wget #{artifact_url}"
+  end
+
+  desc "Restart Application"
+  task :restart, :roles => :app do
+    run "sudo service tomcat6 restart"
+  end
+
+  after "deploy:setup", "deploy:deploy"
+  after "deploy:deploy", "deploy:restart"
+end</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                <p>Save and close the <strong>mydeploy.rb</strong> file</p>
+                              </li> 
+                            <li>Add the file in Git
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git add .</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>Commit the file to Git
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git commit -m "Created deployment script"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>Push it to the Git master.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>Modify your <strong>Jenkins Deploy</strong> job to run your version: <strong>mydeploy.rb</strong>. Run a Build job, Environment job and the Deploy job. Verify the application is deployed to the environment.</li>
+                          </ul>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">EXERCISE: Modify Capistrano Script (OPTIONAL: Ruby)</h4>
+                        <div class="inner-body panel">
+                          <ul class="ul-listed">
+                            <li>From the AWSCLI instance, change directory to <strong>devopsinthecloud</strong>.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/devopsinthecloud/deployment/config/</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                          </li>  
+                              <li>Open the file as shown below.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim deploy.rb</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>A list of some of the deploy tasks is provided below.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">deploy:setup
+deploy:deploy
+deploy:bundle_install
+deploy:db_migrate
+deploy:restart</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                             <li>Capify is run in the jenkins.template</li>
+                            <li>You can also find these files by going to <a href="https://raw.github.com/stelligent/continuous_integration_example/master/deployment/config/deploy.rb" target="_blank">https://raw.github.com/stelligent/continuous_integration_example/master/deployment/config/deploy.rb</a>.</li>
+                            <li>Review the Deployment Jenkins job.</li>
+                            <li>Make a modification to the contents of the file and save it.</li>
+                              <li>Add the file in Git
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git add .</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>Commit the file to Git
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git commit -m "Modified deployment script"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                            <li>Push it to the Git master.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>                             
+                          </ul>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

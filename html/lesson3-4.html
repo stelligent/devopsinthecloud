@@ -1,0 +1,41 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">3.4 - Create an Elastic Load Balancer</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Create an Elastic Load Balancer.</li>
+                    </ul>
+               </div>  
+                     </div>
+                     </div>
+                 </div>
+            <!-- inner body ends here -->  
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">Create an Elastic Load Balancer</h4>
+                            <div class="inner-body panel">
+                                <p>Create an Elastic Load Balancer. NOTE: Be sure that the instances you are load balancing are running an HTTP server on port 80.</p>
+                                <ul class="ul-listed">
+	                          <li>Go to EC2 page of the AWS Management Console: <a href="https://console.aws.amazon.com/ec2/" target="_blank">https://console.aws.amazon.com/ec2/</a> and select the Load Balancers link on the left panel.</li>
+                              <li>Then, click Create Load Balancer. Give the load balancer a name. Leave the defaults for port 80 and click Continue.</li>
+                              <li>You will change the Ping Path to just a forward slash instead of index.html. This way any request that goes to the root path will be part of the health check. Click the Continue button.</li>
+                              <li>On the Add EC2 instances step, select the checkboxes next to the two EC2 instances you created before, that will be part of the load balancer, and click Continue.</li>
+                               <li>Review your settings and click Create. Click Close.</li>
+                               <li>The load balancer now appears in the list of load balancers. Select the checkbox next to your load balancer. A set of tabs opens with more detail about your load balancer. To test your load balancer, copy the DNS Name for the A record and paste it into the address field of your web browser. If your load balancer is working, you will see the default page of your EC2 instance connected to your load balancer.</li>
+                                <li>Select the checkbox next to your load balancer and click the Yes, Delete button.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+        <!--  main div box close here--> </div>
+        <!-- Page Content Wrapper--> </div>
+    <!-- /#wrapper -->

@@ -1,0 +1,77 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">5.5 - Chaos Monkey</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Create and run a rudimentary Chaos Monkey that randomly terminates instances.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                    <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">Chaos Monkey</h4>
+                        <div class="text-center">
+                            <img src="img/Slide26.jpg" alt="" class="img-responsive thumbnail">
+                        </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Run the Chaos Monkey job</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                     <li>Go to http://IPADDRESS:8080/jenkins/job/Chaos/. <strong>IPADDRESS</strong> is the IP Address assigned to you when you launched the <a href="https://console.aws.amazon.com/cloudformation/" target="_blank">Jenkins stack</a>.</li>
+                                     <li>Select the <strong>Configure</strong> link for the Jenkins job. View the job configuration.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">View the Chaos Monkey code</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                     <li>Open the infrastructure destroyer Ruby file. You can find this file by visiting https://github.com/stelligent/devopsinthecloud/blob/master/chaos/infrastructure_destroyer.rb.
+                                     <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ cd devopsinthecloud/chaos</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+ <code class="language-html" data-lang="html">$ sudo vim infrastructure_destroyer.rb</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                    </li>
+                                     <li>This script is configured in Jenkins to run every night.</li>
+                                    <li>Using the Ruby AWS SDK, it randomly terminates instances.</li>
+                                    <li>Be cautious in using this tool. You need an architecture designed to accommodate this kind of failure. This is only an example of one resource - EC2 instance. There are myriad combinations of havoc you can apply to your infrastructure.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+       <!--  main div box close here--> </div>
+<!-- Page Content Wrapper--> </div>
+    <!-- /#wrapper -->

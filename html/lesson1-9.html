@@ -1,0 +1,62 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">1.9 - View and run jobs within a deployment pipeline</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Execute jobs within a deployment pipeline.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create a Hosted Zone</h4> 
+                            <div class="inner-body panel">
+                                <p>Create a Hosted Zone for a domain that you own.</p>
+                                <ul class="ul-listed">
+                                   <li>From the Management Console, select the Route 53 tab: <a href="https://console.aws.amazon.com/route53/" target="_blank">https://console.aws.amazon.com/route53/</a>.</li>
+                                    <li>Click the <strong>Create Hosted Zone</strong> button.</li>
+                                    <li>Name the domain in the <strong>Domain Name</strong> field. Give it the name of a <strong>domain that you own</strong> and that you can use later. I’m using a domain that I own called devopscloud.com. Your domain <strong>must</strong> be different.</li>
+                                    <li>After entering the domain name, click the <strong>Create Hosted Zone</strong> button.</li>
+                                    <li>Select the <strong>checkbox next to the domain</strong>. You’ll see what’s called the <strong>Delegation Set</strong> in the Hosted Zone Details panel. Each of these entries is a domain server that you will enter for your domain servers with your domain registrar.</li>
+                                </ul>
+                                  </div>
+                            </div>
+                         </div>
+                    </div>   
+                    <!-- container-fluid ends here --> 
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">View and execute a deployment pipeline</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Go to the Jenkins dashboard and select the <strong>CDPipeline</strong>.</li>
+                                   <li>Click on the link labeled <strong>Start Build of Pipeline for TargetEnvironment</strong>.</li>
+	                               <li>You'll need to enter values for the <strong>PrivateBucket</strong>, <strong>PublicBucket</strong>, <strong>KeyName</strong> and <strong>HostedZone</strong>.
+                            <ul class="inner-listed">
+                                <li><strong>PrivateBucket</strong> - You named this bucket in the Create an S3 bucket to host credentials section of Lesson 1.1.</li>
+                                <li><strong>PublicBucket</strong> - You named this bucket in the Apply a bucket policy using CloudFormation section of Lesson 1.1.</li>
+                                <li><strong>KeyName</strong> - This key was created in the Create a New Key Pair section of Lesson 1.1. Be sure to include the KeyName suffix (e.g. .pem)</li>
+                                <li><strong>HostedZone</strong> - This is the name of the HostedZone you created in this Lesson - in the section above. Be sure to include the domain suffix (e.g. .com)</li>
+                            </ul>
+                                    </li>
+                                   <li>Click the <strong>Build</strong> button. It could take 30 minutes or more to execute all of the jobs.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            </div><!-- container-fluid ends here --> 
+       <!--  main div box close here--> </div>
+<!-- Page Content Wrapper--> </div>
+    <!-- /#wrapper -->

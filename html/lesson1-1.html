@@ -1,0 +1,330 @@
+            <div class="main-body-div" id="main-box">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">1.1 Setup and Checkin Application Code</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Setup your environments.</li>
+                        <li>Launch a CloudFormation stack.</li>
+                        <li>Make an application code change and commit it to GitHub.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                        <!-- inner body ends here -->
+                        <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Check in changes to application code</h4>           
+                        <div class="text-center">
+                            <img src="img/slide02.jpg" alt="" class="img-responsive thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create an AWS account</h4> 
+                            <div class="inner-body panel">
+                                <p>Create an AWS account by registering for CloudFormation.</p>
+                                <ul class="ul-listed">
+                                   <li>Go to the AWS CloudFormation service: <a href="http://aws.amazon.com/cloudformation/" target="_blank">http://aws.amazon.com/cloudformation/</a>.</li>
+                                    <li>Click the Sign Up Now button</li>
+                                    <li>If you don’t have any account with AWS, choose <strong>I’m a New User</strong>; Otherwise, select <strong>enter your credentials</strong>.</li>
+                                    <li>Enter your login information, contact and billing information and read/accept AWS terms. During the account creation process, you will need to enter a code into your phone for verification purposes.</li>
+                                    <li>Once you've completed the registration process, you will be sent an email. Click on <a href="http://aws.amazon.com/account/" target="_blank">http://aws.amazon.com/account/</a>.</li>
+                                </ul>
+                                </div>
+                            
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create a New Key Pair</h4> 
+                            <div class="inner-body panel">
+                                <p>Create an AWS account by registering for CloudFormation.</p>
+                                <ul class="ul-listed">
+                                   <li>Go to the list of key pairs by going to this <a href="https://console.aws.amazon.com/ec2/home?region=us-east-1#s=KeyPairs" target="_blank">link</a>.</li>
+                                    <li>Select the <strong>Create Key Pair</strong> button and enter <strong>ditc</strong> in the <strong>Key Pair Name</strong> field and the <strong>Create</strong> button. Save the file onto your computer for future use. Click the <strong>Close</strong> button.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Launch an AWS Utility instance using CloudFormation</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Click this <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#cstack=sn~AWSCLI|turl~https://s3.amazonaws.com/filescdcourse/templates/base.template" target="_blank">link</a> to launch an AWS command-line interface instance. This template is provided courtesy of AWS Training.</li>
+                                    <li>Click <strong>Continue</strong>.</li>
+                                    <li>In the <strong>KeyName</strong> field, enter the key pair (i.e. <strong>ditc</strong>) that you created in the previous section. Select the checkbox next to <strong>I acknowledge that this template may create IAM resources</strong> and click Continue.</li>
+                                    <li>Click Continue again, then Close.</li>
+                                    <li>Once the status in CloudFormation is <strong>CREATE_COMPLETE</strong>, select the checkbox next to AWSCLI.</li>
+                                    <li>Select the Outputs tab in the bottom panel and copy the DNS name for the instance into your clipboard.</li>
+                                    <li>Find the <strong>ditc.pem</strong> file on your computer. If you are are a *nix-based computer, you will need to modify the permissions to 400. 
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ chmod 400 ditc.pem</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                    </li>
+                                    <li>From the directory where your ditc.pem is located, enter the command below to SSH into the utility instance. In the example below, the DNS name is ec2-23-20-4-122.compute-1.amazonaws.com. Yours will be different.
+                                    <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ ssh -i ditc.pem ec2-user@ec2-23-20-4-122.compute-1.amazonaws.com</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->                                    
+                                    </li>
+                                    <li>Enter <strong>yes</strong> to the security prompt.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Apply a bucket policy using CloudFormation</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Create a new S3 bucket. This will be used to host your build artifacts. Call it something like <strong>ditcxyzartifacts</strong> where xyz are your initials. I'm calling my bucket stelligentlabs throughout this LiveLesson.</li>
+                                    <li>Click this <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#cstack=sn~BucketPolicy|turl~https://stelligentlabs.s3.amazonaws.com/templates/account_bucket_policies.template" target="_blank">link</a> to run the bucket policy change.</li>
+                                    <li>Click Continue.</li>
+                                    <li>Enter the name of the bucket you you just created (e.g. "ditcxyzartifacts") and click Continue.</li>
+                                    <li>Click Continue again, then Close.</li>
+                                    <li>Once the status in CloudFormation is <strong>CREATE_COMPLETE</strong>, the policy has been applied to your S3 bucket.</li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create an S3 bucket to host credentials</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Create a new S3 bucket and call it <strong>ditcxyzcreds</strong> - where <strong>xyz</strong> are your initials. Write down both of these S3 buckets (ditcxyzcreds and ditcxyzartifacts) as you will use them several times throughout this LiveLesson.</li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create SQS queues</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Go to the <a href="https://console.aws.amazon.com/sqs/home" target="_blank">SQS</a> tab and create two new queues. One called <strong>CloudFormationStacks</strong> and the other called <strong>Deployment</strong>. Set the <strong>Default Visibility Timeout</strong> to 0.</li>                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+          		  </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Setup your GitHub Account</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>If you don't have a Github, create a free one here: <a href="https://github.com/signup/" target="_blank">https://github.com/signup/</a>.</li>  
+                                   <li>Login to your account by going to <a href="https://github.com/login/" target="_blank">https://github.com/login</a>.</li> 
+                                   <li>Go to <a href="https://github.com/stelligent/devopsinthecloud/" target="_blank">https://github.com/stelligent/devopsinthecloud</a>.</li>    
+                                   <li>Click the <strong>Fork</strong> button. A message will display "Where do you want to fork this to?". Click on the button that says <strong>Fork to YOURUSERID</strong>.</li>
+                                   <li>Create an SSH keypair by SSH'ing to the AWSCLI instance you created by launching the CloudFormation stack in the section above. In the example below, I'm using the email address that's registered with my GitHub account. You can find yours by going to https://github.com/settings/profile/. Accept the defaults after running this command.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ ssh-keygen -t rsa -C "paul.duvall@stelligent.com"</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Display the contents of the public key and copy the contents to your clipboard.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ cat ~/.ssh/id_rsa.pub</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li> 
+                                   <li>After logging into your GitHub account, go to your GitHub SSH Keys settings at <a href="https://github.com/settings/ssh/" target="_blank">https://github.com/settings/ssh/</a>. Click on the <strong>Add SSH Key button</strong>, give it a name and paste the contents of the public key into the <strong>Key</strong> text field. Then, click the <strong>Add key</strong> button. Enter your GitHub password when prompted.</li>
+                                   <li>Go back to the AWS CLI instance, go to the root directory and type the following from the command line. Replace <strong>PaulDuvall</strong> with your GitHub userid.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git clone git@github.com:PaulDuvall/sample_app.git</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li> 
+                                   <li>Type <strong>ls</strong> from the command prompt. You should see <strong>sample_app</strong> and <strong>devopsinthecloud</strong> as subdirectories.</li>    
+                                   <li>You can also setup the same environment on your local computer. This way it's easier to use the IDE of your choice.</li>           
+                                 </ul>
+                            </div>
+                        </div>
+               		 </div>
+          		  </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Checkin application code to GitHub</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>From the root directory of your EC2 instance change directory to <strong>sample_app</strong>.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ cd /home/ec2-user/sample_app/app/views/pages</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Open the home.html.erb file.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ sudo vim home.html.erb</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Make a modification to the contents of the file and save it.</li>
+                                   <li>Change directory to <strong>sample_app</strong>.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ cd /home/ec2-user/sample_app</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Add the file in Git.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git add .</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Commit the file to Git.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git commit -m "Modify the application code"</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Push it to the Git master.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+          		  </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Checkin application code to GitHub</h4> 
+                            <div class="inner-body panel">
+                            <p>By default, GitHub will not update changes from the <a href="https://github.com/stelligent/devopsinthecloud" target="_blank">https://github.com/stelligent/devopsinthecloud</a> GitHub repository. Since I will be making changes and updates after the video publication, you will want to go through the following steps to merge the changes we make at stelligent/devopsinthecloud with your forked repository.</p>
+                                <ul class="ul-listed">
+                                   <li>Clone your repository. Replace <strong>PaulDuvall</strong> with your GitHub username.</strong>.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git clone git@github.com:PaulDuvall/devopsinthecloud.git ditcsync</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Change the directory.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ cd ditcsync</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Get the latest from the stelligent repo.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git remote add upstream https://github.com/stelligent/devopsinthecloud.git</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Fetches any new changes from the original repo.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git pull upstream master</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                   <li>Push changes to your forked repo.
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                   </li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+          		  <!-- container-fluid ends here --></div>               
+       <!--  main div box close here--></div>
+       <!-- Page Content Wrapper--></div>
+    <!-- /#wrapper -->
+    

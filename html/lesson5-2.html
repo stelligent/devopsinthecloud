@@ -1,0 +1,355 @@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                    <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">5.2 - Integrate Puppet with CloudFormation</h2>
+                   <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Use the Puppet infrastructure automation tool within a CloudFormation template.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+	            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Puppet Resources</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+  								 <li><a href="https://github.com/stelligent/devopsinthecloud/blob/master/infrastructure/templates/target.template" target="_blank">https://github.com/stelligent/devopsinthecloud/blob/master/infrastructure/templates/target.template</a></li>
+                                 <li><a href="https://github.com/stelligent/devopsinthecloudpuppet/tree/master/modules" target="_blank">https://github.com/stelligent/devopsinthecloudpuppet/tree/master/modules</a></li>
+                                 <li><a href="https://github.com/stelligent/devopsinthecloudpuppet/tree/master/modules/passenger/manifests" target="_blank">https://github.com/stelligent/devopsinthecloudpuppet/tree/master/modules/passenger/manifests</a></li>
+                                 <li><strong>Puppet Apply</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div> 
+             <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Create and run a CloudFormation template</h4> 
+                            <div class="inner-body panel">
+                            <p>You can also integrate the Puppet infrastructure automation tool into CloudFormation. As mentioned, while CloudFormation provides you a lot of power to script the configuration of AWS resources, it’s restricted to AWS resources. Puppet and others tools like it allow you to script your infrastructure outside the context of any cloud provider such as AWS. So, the point is that you can script your entire infrastructure in a tool like Puppet. You can also script your entire AWS infrastructure in nothing but CloudFormation. Instead, you’re going to use both of the tools so that you can leverage the best of both CloudFormation and Puppet. CloudFormation is best for defining the static creation of AWS resources while leveraging the dynamic nature of AWS resources. Puppet’s strength is that it’s a more expressive language for defining actions that occur within the instances once they’ve been provisioned.</p>
+                                <ul class="ul-listed">
+                                  <li>From your local GitHub repository, go to <strong>devopsinthecloud/infrastructure/templates/</strong> and open the my <strong>mytarget.template file</strong>. A copy of the file is located at <a href="https://github.com/stelligent/devopsinthecloud/blob/master/infrastructure/templates/" target="_blank">https://github.com/stelligent/devopsinthecloud/blob/master/infrastructure/templates/</a></li>
+                                  <li>Within the <strong>Parameters</strong> section, add the following parameters to the CloudFormation <strong>mytarget.template file</strong>.
+                                  <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">"KeyName" : {
+  "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+  "Type" : "String",
+  "Default" : "aws",
+  "MinLength": "1",
+  "MaxLength": "64",
+  "AllowedPattern" : "[-_ a-zA-Z0-9]*",
+  "ConstraintDescription" : "can contain only alphanumeric characters, spaces, dashes and underscores."
+},
+
+"InstanceType" : {
+  "Description" : "EC2 instance type",
+  "Type" : "String",
+  "Default" : "c1.medium",
+  "ConstraintDescription" : "must be a valid EC2 instance type."
+},
+
+"ApplicationName" : {
+  "Description" : "CNAME for the application",
+  "Type" : "String",
+  "Default" : "target"
+},
+
+"HostedZone" : {
+  "Description" : "Domain to use",
+  "Type" : "String",
+  "Default" : "devopscloud.com"
+},
+
+"EnvironmentType" : {
+  "Description" : "Mode for rails to run in",
+  "Type" : "String",
+  "Default" : "development"
+},
+
+"PublicBucket" : {
+  "Description" : "S3 bucket for storing build artifacts",
+  "Type" : "String",
+  "Default" : "stelligentlabs",
+  "ConstraintDescription" : "Must be a valid S3 Bucket"
+}</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                  </li>
+                                  <li>Within the <strong>Mappings</strong> section, add the following configuration to the CloudFormation <strong>mytarget.template</strong> file
+                                  <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">"AWSInstanceType2Arch" : {
+  "t1.micro"    : { "Arch" : "64" },
+  "m1.large"    : { "Arch" : "64" },
+  "c1.medium"   : { "Arch" : "64" }
+},
+"AWSRegionArch2AMI" : {
+  "us-east-1"      : { "64" : "ami-7341831a" }
+}</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                  </li>
+                                  <li>Within the <strong>Resources</strong> section, add the following configuration to the CloudFormation <strong>mytarget.template</strong> file. 
+                                   <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">"CfnUser" : {
+  "Type" : "AWS::IAM::User",
+  "Properties" : {
+    "Path": "/",
+    "Policies": [{
+      "PolicyName": "root",
+      "PolicyDocument": { "Statement":[{
+        "Effect":"Allow",
+        "Action":"*",
+        "Resource":"*"
+      }
+    ]}
+   }]
+  }
+},
+
+"HostKeys" : {
+  "Type" : "AWS::IAM::AccessKey",
+  "Properties" : {
+    "UserName" : { "Ref": "CfnUser" }
+  }
+},
+
+"Domain" : {
+  "Type" : "AWS::Route53::RecordSetGroup",
+  "Properties" : {
+    "HostedZoneName" : { "Fn::Join" : [ "", [ {"Ref" : "HostedZone"}, "." ]]},
+	"RecordSets" : [
+	  {
+	  "Name" : { "Fn::Join" : ["", [ { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "." ]]},
+	  "Type" : "A",
+	  "TTL"  : "900",
+	  "ResourceRecords" : [ { "Ref" : "IPAddress" } ]
+	  }]
+	}
+},
+
+"WebServer": {  
+  "Type": "AWS::EC2::Instance",
+  "Metadata" : {
+  "AWS::CloudFormation::Init" : {
+      "config" : {
+        "packages" : {
+          "yum" : {
+            "puppet"   : []
+          }
+        },
+
+		"sources" : {
+		  "/home/ec2-user/" : "https://s3.amazonaws.com/stelligentlabs/puppet.tar.gz\n"
+		},
+
+		"files" : {
+		  "/home/ec2-user/id_rsa.pub" : {
+		  "source" : "https://s3.amazonaws.com/stelligentlabs/keypairs/id_rsa.pub",
+          "mode"   : "000500",
+          "owner"  : "root",
+          "group"  : "root"
+        },
+		
+		"/home/ec2-user/nodes.pp" : {
+          "content" : { "Fn::Join" : ["", [
+		  "node default {\n",
+		  "include system\n",
+		  "include bundler\n",
+		  "include passenger\n",
+		  "include sqlite\n",
+		  "include git\n",
+		  "include httpd\n",
+		"}"
+              ]]},
+            "mode"   : "000500",
+            "owner"  : "root",
+            "group"  : "root"
+          },
+
+		  "/etc/httpd/conf/virtualhosts" : {
+	        "content" : { "Fn::Join" : ["", [
+	        "NameVirtualHost *:80\n",
+	        "\n",
+	        "ServerName ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+	        "ServerAlias ", { "Fn::Join" : [ ".", [ { "Ref" : "ApplicationName" }, { "Ref" : "HostedZone" }]]}, "\n",
+			"RailsEnv ", {"Ref" : "EnvironmentType"}, "\n",
+			"DocumentRoot /var/www/rails/public\n",
+			"\n",
+			"AllowOverride all\n",
+			"Options -MultiViews\n",
+			"\n",
+	        "\n"
+	        ]]},
+	            "mode"   : "000500",
+	            "owner"  : "root",
+	            "group"  : "root"
+	      },
+          "/etc/httpd/conf/passenger" : {
+	        "content" : { "Fn::Join" : ["", [
+	          "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12/ext/apache2/mod_passenger.so\n",
+	          "PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.12\n",
+	          "PassengerRuby /usr/bin/ruby\n"
+	        ]]},
+	            "mode"   : "000500",
+	            "owner"  : "root",
+	            "group"  : "root"
+	      }
+	    }
+      }
+    }
+  },
+  "Properties": {
+    "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+    { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+    "InstanceType"   : { "Ref" : "InstanceType" },
+    "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
+    "KeyName"        : { "Ref" : "KeyName" },
+	"Tags" : [{ "Key" : "Name", "Value" : "Target Environment" }],
+	"UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+	"#!/bin/bash -v\n",
+	"date > /home/ec2-user/starttime\n",
+    "yum update -y aws-cfn-bootstrap\n",
+
+      "# Install packages\n",
+      "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
+      "    --access-key ",  { "Ref" : "HostKeys" },
+      "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+      "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+			  "# Build environment using Puppet\n",
+      "puppet apply --modulepath=/home/ec2-user/modules /home/ec2-user/nodes.pp\n",
+
+	  "# Add in virtual hosts config\n",
+      "cat /etc/httpd/conf/passenger >> /etc/httpd/conf/httpd.conf\n",
+	  "cat /etc/httpd/conf/virtualhosts >> /etc/httpd/conf/httpd.conf\n",
+
+	  "# Add Public key for passwordless authentication from Jenkins Instance\n",
+	  "cat /home/ec2-user/id_rsa.pub >> /home/ec2-user/.ssh/authorized_keys\n",
+
+	  "# Disable tty for ec2-user\n",
+	  "echo \"Defaults:%ec2-user !requiretty\" >> /etc/sudoers\n",
+	  "echo \"Defaults:ec2-user !requiretty\" >> /etc/sudoers\n",
+
+	  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
+
+	  "date > /home/ec2-user/stoptime"
+	  ]]}}
+  }
+},
+
+"IPAddress" : {
+  "Type" : "AWS::EC2::EIP"
+},
+
+"IPAssoc" : {
+  "Type" : "AWS::EC2::EIPAssociation",
+  "Properties" : {
+    "InstanceId" : { "Ref" : "WebServer" },
+    "EIP" : { "Ref" : "IPAddress" }
+   }
+},
+
+"FrontendGroup" : {
+  "Type" : "AWS::EC2::SecurityGroup",
+  "Properties" : {
+    "GroupDescription" : "Enable SSH and access to Apache",
+    "SecurityGroupIngress" : [
+      {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0" },
+      {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" }
+    ]
+  }      
+},
+
+"WaitHandle" : {
+  "Type" : "AWS::CloudFormation::WaitConditionHandle"
+},
+
+"WaitCondition" : {
+  "Type" : "AWS::CloudFormation::WaitCondition",
+  "DependsOn" : "WebServer",
+  "Properties" : {
+    "Handle" : { "Ref" : "WaitHandle" },
+    "Timeout" : "1200"
+  }
+}</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                  </li>
+                                  <li>Within the <strong>Outputs</strong> section, add the following parameters to the CloudFormation <strong>mytarget.template</strong> file. Outputs is an optional section where you return values to the user of the CloudFormation stack. Outputs are displayed in the Outputs section in the Management Console and when running the cfn-describe-stacks command. 
+                                  <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+                                 	 	  <code class="language-html" data-lang="html">"InstanceIPAddress" : {
+  "Value" : { "Ref" : "IPAddress" }
+  },
+
+"StackName" : {
+  "Value" : { "Ref" : "AWS::StackName" }
+  },
+
+"SampleApp" : {
+  "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "ApplicationName" }, ".", { "Ref" : "HostedZone" }, "/"]] },
+  "Description" : "URL for newly created Sample App"
+  }
+}</code>
+                                   		</pre>
+                                    </figure>
+                                    <!--code block ends here-->
+                                  </li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">CloudFormation with Puppet</h4>           
+                        <div class="text-center">
+                            <img src="img/Slide23.jpg" alt="" class="img-responsive thumbnail">
+                        </div>
+                        </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->  
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">Launch CloudFormation stack based on template</h4> 
+                            <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                   <li>Click this <a href="https://console.aws.amazon.com/cloudformation/home" target="_blank">link</a> to launch CloudFormation.</li>
+                                  <li>Click the Create New Stack button</li>
+                                  <li>Enter a name in the Stack Name field.</li>
+                                  <li>Click the Upload a Template File radio button and the Choose File button. Upload the myjenkins.template you created and click the Continue button.</li>
+                                  <li>Modify any of the parameters as necessary and complete the rest of the wizard.</li>
+                                </ul>
+                            </div>
+                        </div>
+               		 </div>
+            <!-- container-fluid ends here --> </div>          
+       <!--  main div box close here--> </div>
+<!-- Page Content Wrapper--> </div>
+    <!-- /#wrapper -->

@@ -1,0 +1,273 @@
+    <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">4.3 Script a build in Ant</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Script a build that packages software so that it can be deployed.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">EXERCISE: Run Ant build</h4>
+                        <div class="inner-body panel">
+                          <ul class="ul-listed">
+                            <li>From the AWSCLI, install using yum
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo yum -y install ant</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>  
+                              <li>Go to the build directory.
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">cd /home/ec2-user/continuous_integration_example/software/build</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                              </li>
+                              <li>Type ant from the command line
+                              <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">ant</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                <p>You should receive a message like this: </p>
+                               <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">Buildfile: build.xml does not exist!
+Build failed</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->    
+                              </li>   
+                            <li>From the build directory, create an Ant build file called <strong>myantbuild.xml</strong>
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim myantbuild.xml</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Create an Ant <strong>project</strong> within the <strong>myantbuild.xml</strong> file
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;project name="mybuild" default="all" basedir="."&gt;	
+&lt;/project&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Define <strong>properties</strong> between the <strong>project</strong> tags.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;property name="classes.dir" value="classes"/&gt;
+&lt;property name="src.dir" value="src"/&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Define <strong>targets</strong> after the <strong>property definitions</strong>
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;target name="all"&gt;
+&lt;/target&gt;
+
+&lt;target name="compile-src"&gt;
+&lt;/target&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Add <strong>tasks</strong> to targets (within the <strong>compile-src</strong> target)
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;javac destdir="${classes.dir}" debug="true"&gt;
+  &lt;mkdir dir="${classes.dir}"/&gt;
+  &lt;src path="${src.dir}" /&gt;
+  &lt;classpath refid="project.class.path"/&gt;
+&lt;/javac&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Define <strong>dependent targets</strong>
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;target name="all" depends="compile-src"&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>The entire <strong>myantbuild.xml</strong> file should look like this:
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;project name="mybuild" default="all" basedir="."&gt;
+
+  &lt;property name="classes.dir" value="classes"/&gt;
+  &lt;property name="src.dir" value="src"/&gt;
+
+  &lt;path id="project.class.path"&gt;
+    &lt;pathelement location="." /&gt;
+    &lt;pathelement location="${classes.dir}" /&gt;
+  &lt;/path&gt;
+
+  &lt;target name="all" depends="compile-src"&gt;
+  &lt;/target&gt;
+
+  &lt;target name="compile-src"&gt;
+    &lt;mkdir dir="${classes.dir}"/&gt;
+    &lt;javac destdir="${classes.dir}" debug="true"&gt;
+      &lt;src path="${src.dir}" /&gt;
+      &lt;classpath refid="project.class.path"/&gt;
+    &lt;/javac&gt;
+  &lt;/target&gt;
+&lt;/project&gt;</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Run <strong>myantbuild.xml</strong> file from the command line
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ ant -f myantbuild.xml</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Add the file in Git
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git add .</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                               <li>Commit the file to Git
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git commit -m "Modified build script"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                              <li>Push it to the Git master.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->  
+                              </li>
+                          </ul>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Create a Rake build script (OPTIONAL)</h4>
+                        <div class="inner-body panel">
+                            <ul class="ul-listed">
+                                    <li>From your AWSCLI instance go to <strong>sample_app</strong>, open some build scripts.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/sample_app/</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim Rakefile</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                        <p>Open the build tasks.</p>
+                             <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/sample_app/lib/tasks</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                         <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim sample_data.rake</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                    </li>
+                                    <li>You can also find these files by going to <a href="https://github.com/stelligent/sample_app/blob/master/Rakefile" target="_blank">https://github.com/stelligent/sample_app/blob/master/Rakefile</a> and <a href="https://github.com/stelligent/sample_app/blob/master/lib/tasks/sample_data.rake" target="_blank">https://github.com/stelligent/sample_app/blob/master/lib/tasks/sample_data.rake</a>.</li>
+                                <li>Make a modification to the contents of the file and save it.</li>
+                            <li>Add the file in Git
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git add .</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->                                
+                                </li>
+                                <li>Commit the file to Git
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git commit -m "Modified build script"</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->                                
+                                </li>
+                            <li>Push it to the Git master.
+                                <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ git push</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->                                
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

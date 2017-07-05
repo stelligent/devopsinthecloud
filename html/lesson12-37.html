@@ -1,0 +1,129 @@
+    <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">6.3 Configure a scripted environment job</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Create a new job in Jenkins that builds an environment using the AWS infrastructure and CloudFormation.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+                <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">EXERCISE: Create a Jenkins job that builds a new environment</h4>
+                        <div class="inner-body panel">
+                          <ul class="ul-listed">
+                            <li>From the Jenkins dashboard, select the <strong>New Job</strong> link.</li>
+                            <li>Enter <strong>MyTargetEnvironment</strong> in the <strong>Job name</strong> field. Click on the <strong>Build a free-style software project</strong> radio button and click the <strong>OK</strong> button.</li>
+                              <li>Select the checkbox next to <strong>This build is parameterized</strong>. Enter a String Parameter type and give it the name <strong>STACK_NAME</strong>. Enter your student id for the Default Value text field.</li>
+                            <li>Enter another String Parameter type and give it the name <strong>PrivateBucket</strong>. Enter <strong>cd29creds</strong> (where 29 is your student id) for the <strong>Default Value</strong> text field.</li>
+                              <li>Enter another String Parameter type and give it the name <strong>PublicBucket</strong>. Enter <strong>cd29artifacts</strong> (where 29 is your student id) for the <strong>Default Value</strong> text field.</li>
+                            <li>Enter another String Parameter type and give it the name <strong>KeyName</strong>. Enter <strong>cd29</strong> (where 29 is your student id) for the <strong>Default Value</strong> text field.</li>
+                            <li>Under the <strong>Source Code Management</strong> section, select the <</strong>strong>Git</strong> radio button. In the <strong>Repository URL</strong> field, enter your forked repository URL. Yours will be something like student03, student08, etc. For example:  
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">git@github.com:student29/continuous_integration_example.git</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                        </li>
+                    <li>In the <strong>Branches to build</strong> | <strong>Branch Specifier field</strong>, enter **</li>
+                        <li>Within the <strong>Build Environment</strong> section, click on the <strong>Create AWS Cloud Formation stack</strong> checkbox.</li>
+                        <li>In the <strong>Cloud Formation recipe file. (.json)</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">software/infrastructure/target.template</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>In the Stack name field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">${STACK_NAME}</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                         <li>In the <strong>Stack description</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">stack</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>Leave <strong>Cloud Formation parameters</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">PrivateBucket=${PrivateBucket},PublicBucket=${PublicBucket},KeyName=${KeyName}</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>In the <strong>Timeout (seconds)</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">900</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>In the <strong>AWS Access Key</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$AWS_ACCESS_KEY</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>In the <strong>AWS Secret Key</strong> field, enter:
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$AWS_SECRET_ACCESS_KEY</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>Leave the <strong>Automatically delete the stack when the job completes</strong> checkbox <strong>unchecked</strong>:</li>
+                        <li>Within the <strong>Build</strong> section, enter the following command in the <strong>Execute shell</strong> text field.
+                            <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">ruby /usr/share/tomcat6/scripts/aws/create_domain.rb ${STACK_NAME}
+echo "artifact_bucket=$(eval "echo \$${STACK_NAME}_ArtifactBucket")" >> /tmp/properties
+echo "ip_address=$(eval "echo \$${STACK_NAME}_InstanceIPAddress")" >> /tmp/properties
+echo "stack_name=$(eval "echo \$${STACK_NAME}_StackName")" >> /tmp/properties
+ruby /usr/share/tomcat6/scripts/aws/load_domain.rb ${STACK_NAME}</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+            </li>
+                        <li>Click the <strong>Save</strong> button.</li>
+                        <li>Go back to the Jenkins dashboard and click the <strong>Build</strong> button next to the <strong>MyTargetEnvironment</strong> job.</li>
+                          </ul>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->

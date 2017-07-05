@@ -1,0 +1,418 @@
+    <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                   <!-- Main Body Content -->
+                    <h2 class="page-title bg-primary">4.1 Create a CloudFormation template</h2>
+               <!-- inner body -->
+                <div class="inner-body panel">
+                    <h4 class="sub-heading">Learning Objectives</h4>
+                    <p>By the end of this lesson you will be able to -</p>
+                    <ul class="edited-ul">
+                        <li>Create and run a CloudFormation template.</li>
+                    </ul>
+                       </div>  
+                     </div>
+                     </div>
+                 </div>
+                <!-- inner body ends here -->
+       <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <h4 class="bg-info secondary-header">CloudFormation</h4>
+                        <div class="text-center">
+                            <img src="img/Slide028.jpg" alt="" class="img-responsive thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+            <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Create and run a CloudFormation template</h4>
+                        <div class="inner-body panel">
+                        <p>CloudFormation is described as a JSON (JavaScript Object Notation) template. It's a model-driven template in that the AWS infrastructure is instantiated according to its own specification of proper order of execution. It is not a procedural language. If you are writing a CloudFormation template, you only need to follow the rules of the CloudFormation external Domain Specific Language (DSL) in JSON notation. </p>
+                                <ul class="ul-listed">
+                                    <li>From your AWSCLI, go to the <strong>infrastructure</strong> directory.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ cd /home/ec2-user/continuous_integration_example/software/infrastructure</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here-->
+                                    </li>
+                                    <li>From your AWSCLI, open the <strong>myjenkins.template</strong> file.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">$ sudo vim myjenkins.template</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Within the <strong>Parameters</strong> section, add the following parameters to the CloudFormation <strong>myjenkins.template</strong> file. Parameters are custom fields that users of the CloudFormation template enter to configure their environment. You can enter these parameters through the CloudFormation wizard available through the AWS Management Console, the command line interface or through the CloudFormation API. Within each parameter you can setup constraints for these parameters. Constraints may describe things like the Min and Max Size, whether or not to echo back what the user is entering in the parameter field, etc. There’s a syntax to describing a Parameter. First, you define the name Parameters in quotes followed by a colon. Then, you put an open curly brace. You use commas to delimit each parameter with the exception of the last parameter. Each parameter name is a custom name that you come up with. Each parameter name is in quotes. Then, you define each of the properties for the parameter. A parameter can be defined as a String, a Number of a CommaDelimitedList
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">"KeyName" : {
+  "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+  "Type" : "String",
+  "Default" : "cd29",
+  "MinLength": "1",
+  "MaxLength": "64",
+  "AllowedPattern" : "[-_ a-zA-Z0-9]*",
+  "ConstraintDescription" : "Can contain only alphanumeric characters, spaces, dashes and underscores."
+},
+
+"InstanceType" : {
+  "Description" : "WebServer EC2 instance type",
+  "Type" : "String",
+  "Default" : "c1.medium",
+  "ConstraintDescription" : "Must be a valid EC2 instance type."
+},
+
+"PrivateBucket" : {
+  "Description" : "S3 bucket for storing credentials",
+  "Type" : "String",
+  "Default" : "cd000creds",
+  "ConstraintDescription" : "Must be a valid S3 Bucket"
+},
+
+"PublicBucket" : {
+  "Description" : "S3 bucket for storing build artifacts",
+  "Type" : "String",
+  "Default" : "cd000artifacts",
+  "ConstraintDescription" : "Must be a valid S3 Bucket"
+}</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Within the <strong>Mappings</strong> section, add the following parameters to the CloudFormation <strong>myjenkins.template</strong> file. Mappings are key/value pairs. In this template, I'm defining the AWSInstanceType2Arch to use a t1.micro 64-bit instance with this AMI. Typically, you might have multiple AMI's based on a region. This is referred to later when defining a launch configuration.
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">"AWSInstanceType2Arch" : {
+  "t1.micro"    : { "Arch" : "64" },
+  "m1.large"    : { "Arch" : "64" },
+  "m1.xlarge"   : { "Arch" : "64" },
+  "m2.xlarge"   : { "Arch" : "64" },
+  "m2.2xlarge"  : { "Arch" : "64" },
+  "m2.4xlarge"  : { "Arch" : "64" },
+  "c1.medium"   : { "Arch" : "64" },
+  "c1.xlarge"   : { "Arch" : "64" },
+  "cc1.4xlarge" : { "Arch" : "64" }
+},
+"AWSRegionArch2AMI" : {
+  "us-east-1"      : { "32" : "ami-7f418316", "64" : "ami-7341831a" },
+  "us-west-1"      : { "32" : "ami-951945d0", "64" : "ami-971945d2" },
+  "us-west-2"      : { "32" : "ami-16fd7026", "64" : "ami-10fd7020" },
+  "eu-west-1"      : { "32" : "ami-24506250", "64" : "ami-20506254" },
+  "ap-southeast-1" : { "32" : "ami-74dda626", "64" : "ami-7edda62c" },
+  "ap-northeast-1" : { "32" : "ami-dcfa4edd", "64" : "ami-e8fa4ee9" }
+}</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                    <li>Within the <strong>Resources</strong> section, add the following configuration to the CloudFormation <strong>myjenkins.template</strong> file. The Resources section is where most of the “real work” is done in a CloudFormation template. Resources define how the various AWS resources are configured as part of your infrastructure. This includes most of the AWS resources such as EC2 Instance, EC2 Security Group, Auto Scaling LaunchConfiguration and Amazon CloudWatch Alarm
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">"CfnUser" : {
+      "Type" : "AWS::IAM::User",
+      "Properties" : {
+        "Path": "/",
+        "Policies": [
+		  {
+            "PolicyName": "Admin",
+            "PolicyDocument": 
+			  { "Statement": [
+				{
+            	  "Effect":"Allow",
+                  "Action":"*",
+                  "Resource":"*"
+				}
+			]}			
+          }
+		]
+      }
+    },
+
+    "PrivateBucketPolicy" : {
+      "Type" : "AWS::S3::BucketPolicy",
+      "Properties" : {
+        "PolicyDocument": {
+          "Id":"PrivateBucketPolicy",
+          "Statement":[
+ 		    {
+              "Sid":"ReadAccess",
+	          "Action":["s3:GetObject"],
+	          "Effect":"Allow",
+	          "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "PrivateBucket" } , "/*" ]]},
+	          "Principal":{ "AWS": { "Fn::GetAtt" : [ "CfnUser", "Arn" ]} }
+            }
+		  ]
+        },
+        "Bucket" : {"Ref" : "PrivateBucket"}
+      }
+    },
+
+    "HostKeys" : {
+      "Type" : "AWS::IAM::AccessKey",
+      "Properties" : {
+        "UserName" : {"Ref": "CfnUser"}
+      }
+    },
+
+    "WebServer": {  
+      "Type": "AWS::EC2::Instance",
+ 	  "DependsOn" : "PrivateBucketPolicy",
+      "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "packages" : {
+              "yum" : {
+                "tomcat6"   			  : [],
+				"ant"					  : [],
+				"java-1.6.0-openjdk-devel": [],
+				"mysql-server"			  : [],
+				"mysql"					  : [],
+				"git"					  : [],
+				"make"					  : [],
+				"gcc"					  : [],
+				"sqlite-devel"			  : [],
+				"libxml2-devel"			  : [],
+				"libxslt-devel"			  : [],
+				"libyaml-devel"			  : []
+              }
+            },
+
+			"sources" : {
+			  "/usr/share/tomcat6/scripts/" : "https://s3.amazonaws.com/sea2shore/jenkins_utilities.tar.gz"
+            },
+
+			"files" : {
+	          "/usr/share/tomcat6/webapps/jenkins.war" : { 
+		        "source" : "http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war",
+		        "mode"   : "000500", 
+		        "owner"  : "tomcat",
+		        "group"  : "tomcat" 
+		      },
+
+			  "/usr/share/tomcat6/.ssh/known_hosts" : {
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/known_hosts"]]},
+	            "mode"   : "000644",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat",
+				"authentication" : "S3AccessCreds"
+	          },
+
+			  "/usr/share/tomcat6/.ssh/id_rsa" : {
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/", { "Ref" : "PrivateBucket" }, "/id_rsa"]]},
+	            "mode"   : "000600",
+	            "owner"  : "tomcat",
+	            "group"  : "tomcat",
+				"authentication" : "S3AccessCreds"
+	          },
+
+			  "/etc/cron.hourly/jenkins_versioning.sh" : {
+				"source" : { "Fn::Join" : ["", ["https://s3.amazonaws.com/stelligentlabs/scripts/jenkins/jenkins_versioning.sh"]]},
+		        "mode"   : "000500", 
+		        "owner"  : "tomcat",
+		        "group"  : "tomcat"
+			  },
+
+			  "/usr/share/tomcat6/scripts/config/aws.config" : {
+				"content" : { "Fn::Join" : ["", [
+				  "AWS.config(\n",
+					":access_key_id => \"", { "Ref" : "HostKeys" }, "\",\n",
+					":secret_access_key => \"", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\")\n"
+                  ]]},
+				"mode"   : "000500",
+                "owner"  : "tomcat",
+                "group"  : "tomcat"
+			  }
+		    }
+          }
+        },
+
+		"AWS::CloudFormation::Authentication" : {
+		  "S3AccessCreds" : {
+		    "type" : "S3",
+		    "accessKeyId" : { "Ref" : "HostKeys" },
+		    "secretKey" : {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+		    "buckets" : [ { "Ref" : "PrivateBucket" }, { "Ref" : "PublicBucket" } ]
+		  }
+		}
+      },
+      "Properties": {
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "InstanceType"   : { "Ref" : "InstanceType" },
+        "SecurityGroups" : [ {"Ref" : "FrontendGroup"} ],
+        "KeyName"        : { "Ref" : "KeyName" },
+		"Tags" : [{ "Key" : "Name", "Value" : "Jenkins" }],
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash -v\n",
+		  "date > /home/ec2-user/starttime\n",
+          "yum update -y aws-cfn-bootstrap\n",
+
+          "# Install packages\n",
+          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackName" }, " -r WebServer ",
+          "    --access-key ",  { "Ref" : "HostKeys" },
+          "    --secret-key ", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+          "    --region ", { "Ref" : "AWS::Region" }, " || error_exit 'Failed to run cfn-init'\n",
+
+		  "sudo service mysqld start\n",
+		  "/usr/bin/mysqladmin -u root password 'mysql'\n",
+
+		  "# Copy Github credentials to root ssh directory\n",
+		  "cp /usr/share/tomcat6/.ssh/* /root/.ssh/\n",
+
+		  "# Update Jenkins with versioned configuration\n",
+		  "rm -rf /usr/share/tomcat6/.jenkins\n",
+		  "git clone git@github.com:stelligent/ciexample_jenkins.git /usr/share/tomcat6/.jenkins\n",
+
+		  "# Installing Ruby 1.9.3 from RPM\n",
+		  "wget https://s3.amazonaws.com/stelligentlabs/resources/rpm/ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+		  "rpm -Uvh ruby-1.9.3p0-2.amzn1.x86_64.rpm\n",
+
+		  "# Install Jenkins Plugins\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/git/1.1.16/git.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/s3/0.2.0/s3.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/jenkins-cloudformation-plugin/0.9/jenkins-cloudformation-plugin.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/build-pipeline-plugin/1.2.3/build-pipeline-plugin.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/github/1.2/github.hpi\n",
+		  "wget -P /usr/share/tomcat6/.jenkins/plugins/ http://updates.jenkins-ci.org/download/plugins/dashboard-view/2.2/dashboard-view.hpi\n",
+
+		  "# Install Bundler\n",
+		  "gem install bundler\n",
+		  "gem install aws-sdk\n",
+		  "gem install cucumber\n",
+		  "gem install net-ssh\n",
+		  "gem install capistrano\n",
+
+		  "# Add Tomcat user to sudoers and disable tty\n",
+		  "echo \"tomcat ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers\n",
+		  "echo \"Defaults:%tomcat !requiretty\" >> /etc/sudoers\n",
+		  "echo \"Defaults:tomcat !requiretty\" >> /etc/sudoers\n",
+
+		  "# Update main Jenkins config\n",
+		  "sed -i 's@.*@", { "Ref" : "HostKeys" }, "@' /usr/share/tomcat6/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
+		  "sed -i 's@.*@", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "@' /usr/share/tomcat6/.jenkins/hudson.plugins.s3.S3BucketPublisher.xml\n",
+
+		  "# Update Build Jenkins Job config\n",
+		  "sed -i 's@.*@", { "Ref" : "PublicBucket" }, "@' /usr/share/tomcat6/.jenkins/jobs/Build/config.xml\n",
+		  "sed -i 's@.*@", { "Ref" : "PublicBucket" }, "@' /usr/share/tomcat6/.jenkins/jobs/ShanghaiBuild/config.xml\n",
+		  "sed -i 's@.*@", { "Ref" : "PublicBucket" }, "/templates@' /usr/share/tomcat6/.jenkins/jobs/Templates/config.xml\n",
+		  "sed -i 's@.*@", { "Ref" : "PublicBucket" }, "/scripts/aws@' /usr/share/tomcat6/.jenkins/jobs/JenkinsConfig/config.xml\n",
+
+		  "# Add AWS Credentials to Tomcat\n",
+		  "echo \"AWS_ACCESS_KEY=", { "Ref" : "HostKeys" }, "\" >> /etc/sysconfig/tomcat6\n",
+		  "echo \"AWS_SECRET_ACCESS_KEY=", {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]}, "\" >> /etc/sysconfig/tomcat6\n",
+		  "echo \"AWS_CLOUDFORMATION_HOME=/opt/aws/apitools/cfn/\" >> /etc/sysconfig/tomcat6\n",
+
+		  "# Add CloudFormation CLI tools\n",
+		  "wget -P /opt/aws/apitools/ https://s3.amazonaws.com/stelligentlabs/resources/aws_cli/CloudFormation-CLI.tar.gz\n",
+		  "tar -C /opt/aws/apitools/ -xf /opt/aws/apitools/CloudFormation-CLI.tar.gz\n",
+
+		  "# Setup deployment directory\n",
+		  "mkdir /var/www/rails\n",
+		  "sudo chown -R ec2-user:ec2-user /var/www/rails\n",
+
+		  "# Tomcat Setup\n",
+		  "chown -R tomcat:tomcat /usr/share/tomcat6/\n",
+		  "service tomcat6 start\n",
+
+		  "/opt/aws/bin/cfn-signal", " -e 0", " '", { "Ref" : "WaitHandle" }, "'","\n",
+
+		  "date > /home/ec2-user/stoptime"
+        ]]}}        
+      }
+    },
+
+
+    "FrontendGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH and access to Apache and Tomcat",
+        "SecurityGroupIngress" : [
+          {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
+	      {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+		  {"IpProtocol" : "tcp", "FromPort" : "8080", "ToPort" : "8080", "CidrIp" : "0.0.0.0/0"}
+        ]
+      } 
+    },
+
+	"WaitHandle" : {
+      "Type" : "AWS::CloudFormation::WaitConditionHandle"
+    },
+
+    "WaitCondition" : {
+      "Type" : "AWS::CloudFormation::WaitCondition",
+      "DependsOn" : "WebServer",
+      "Properties" : {
+        "Handle" : { "Ref" : "WaitHandle" },
+        "Timeout" : "1200"
+      }
+    }</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                              <li>Within the <strong>Outputs</strong> section, add the following parameters to the CloudFormation <strong>myjenkins.template</strong> file. Outputs is an optional section where you return values to the user of the CloudFormation stack. Outputs are displayed in the Outputs section in the Management Console and when running the cfn-describe-stacks command. 
+                                        <!-- code block -->
+                                    <figure class="highlight">
+                                 	   <pre>
+            <code class="language-html" data-lang="html">"Instance": {
+    "Description": "DNS Name of the newly created EC2 instance", 
+    "Value": { "Fn::GetAtt": [ "WebServer", "PublicDnsName" ] }
+},
+					"JenkinsURL" : {
+  "Value" : { "Fn::Join" : ["", ["http://", {"Fn::GetAtt": ["WebServer", "PublicDnsName"] }, ":8080/jenkins"]] },
+  "Description" : "URL for newly created Jenkins app"
+}
+    }</code>
+                                   		</pre>
+                                    </figure>
+                           <!--code block ends here--> 
+                                    </li>
+                                <li><strong>Resources for using CloudFormation:</strong>
+                                <p></p>
+                                <p><a href="http://docs.amazonwebservices.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html" target="_blank">CloudFormation Getting Started</a></p>    
+                                <p><a href="http://docs.amazonwebservices.com/AWSCloudFormation/latest/APIReference/API_Operations.html" target="_blank">CloudFormation API Reference</a></p>    
+                                <p><a href="http://docs.amazonwebservices.com/AWSCloudFormation/latest/UserGuide/CFN_CMD.html" target="_blank">CloudFormation Command Line Reference</a></p>    
+                                <p><a href="http://docs.amazonwebservices.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html" target="_blank">AWS Resource Types Reference</a></p>    
+                                </li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+       <!-- container-fluid start here -->
+                <div class="container-fluid">        
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                         <h4 class="bg-info secondary-header">EXERCISE: Launch CloudFormation stack based on template</h4>
+                        <div class="inner-body panel">
+                                <ul class="ul-listed">
+                                    <li>Login to <a href="http://aws.amazon.com/console" target="_blank">http://aws.amazon.com/console</a> and launch <a href="https://console.aws.amazon.com/cloudformation/home" target="_blank">https://console.aws.amazon.com/cloudformation/home</a>.</li>
+                                <li>Click the <strong>Create New Stack</strong> button</li>
+                                <li>Enter a name in the <strong>Stack Name</strong> field that includes your <strong>student id</strong> (01, 02, etc.).</li>
+                                <li>Click the <strong>Upload a Template File</strong> radio button and the Choose File button. Upload the <strong>myjenkins.template</strong> you created and click the Continue button</li>
+                                <li>Modify any of the parameters as necessary and complete the rest of the wizard. </li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid ends here -->
+       <!--  main div box close here--> </div>
+    <!-- Page Content Wrapper--> </div>
+<!-- /#wrapper -->
